@@ -1,7 +1,7 @@
 # CSC340-GroupProject
 
 ## Title
-- The name of this project has yet to be decided.
+- Restaurant Ready!
 
 ## Team Members
 - Eric Hall
