@@ -1,12 +1,16 @@
 # CSC340-GroupProject
 
 ## Title
-- Restaurant Ready!
+- Point of Sale system for restuarants
+
 
 ## Team Members
 - Eric Hall
 - Sam Buttonow
 - Rizik Haddad
+
+## Nickname
+- Restuarant Ready!!
 
 ## Point-of-Sale System
 
