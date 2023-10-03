@@ -10,7 +10,7 @@ import java.net.URL;
 
 public class RestaurantReadyClient extends Application {
 
-    private static final String HELLO_VIEW_PATH = "/fxml/hello-view.fxml";
+    private static final String HELLO_VIEW_PATH = "/fxml/order-entry.fxml";
 
     @Override
     public void start(Stage stage) throws IOException {
