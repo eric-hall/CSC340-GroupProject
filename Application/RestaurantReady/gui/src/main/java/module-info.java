@@ -10,4 +10,6 @@ module com.restready.gui {
 
     opens com.restready.gui to javafx.fxml;
     exports com.restready.gui;
+    exports com.restready.gui.cashier;
+    opens com.restready.gui.cashier to javafx.fxml;
 }

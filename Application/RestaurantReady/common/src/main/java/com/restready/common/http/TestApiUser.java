@@ -1,4 +1,4 @@
-package com.restready.gui;
+package com.restready.common.http;
 
 import java.io.*;
 import java.net.*;
