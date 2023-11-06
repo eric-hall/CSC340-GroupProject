@@ -14,7 +14,7 @@ public class TicketsOverviewController extends Controller {
 
     @FXML
     public void initialize() {
-        defaultToolbarController.setOnToolbarBackButtonPressed(e -> Log.info("TicketsOverviewController", "Back button pressed!"));
-        defaultToolbarController.setOnToolbarHomeButtonPressed(e -> Log.info("TicketsOverviewController", "Home button pressed!"));
+        defaultToolbarController.setOnToolbarBackButtonPressed(e -> Log.info(getPageName(), "Back button pressed!"));
+        defaultToolbarController.setOnToolbarHomeButtonPressed(e -> Log.info(getPageName(), "Home button pressed!"));
     }
 }

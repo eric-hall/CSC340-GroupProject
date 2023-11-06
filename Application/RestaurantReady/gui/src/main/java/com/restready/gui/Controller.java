@@ -8,8 +8,6 @@ import java.net.URL;
 
 /**
  * Base class for custom GUI controllers.
- * Contains common metadata needed for communication between controllers.
- * Also contains optional lifecycle methods to be overridden.
  */
 public abstract class Controller {
 
@@ -42,8 +40,8 @@ public abstract class Controller {
         Parent page = fxmlLoader.load();
 
         // Remove 'Controller' from end of class name
-        String name = controllerClass.getName();
-        name = name.replaceFirst("/(?=[A-Z][^A-Z]+$)/", "");
+        String name = controllerClass.getSimpleName();
+        name = name.replaceAll("Controller$", "");
 
         // Initialize and return...
         Controller controller = fxmlLoader.getController();

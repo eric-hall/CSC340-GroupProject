@@ -14,7 +14,7 @@ public class OrderEntryController extends Controller {
 
     @FXML
     public void initialize() {
-        defaultToolbarController.setOnToolbarBackButtonPressed(e -> Log.info("OrderEntryController", "Back button pressed!"));
-        defaultToolbarController.setOnToolbarHomeButtonPressed(e -> Log.info("OrderEntryController", "Home button pressed!"));
+        defaultToolbarController.setOnToolbarBackButtonPressed(e -> Log.info(getPageName(), "Back button pressed!"));
+        defaultToolbarController.setOnToolbarHomeButtonPressed(e -> Log.info(getPageName(), "Home button pressed!"));
     }
 }
