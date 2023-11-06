@@ -11,41 +11,41 @@ import java.net.URL;
  */
 public abstract class Controller {
 
-    private Parent _pageRoot;
-    private String _pageName;
+    private Parent _root;
+    private String _name;
 
-    public final Parent getPageRoot() {
-        return _pageRoot;
+    public final Parent getRoot() {
+        return _root;
     }
 
-    public final String getPageName() {
-        return _pageName;
+    public final String getName() {
+        return _name;
     }
 
-    private void initialize(Parent page, String name) {
-        _pageRoot = page;
-        _pageName = name;
+    private void initialize(Parent root, String name) {
+        _root = root;
+        _name = name;
     }
 
     /**
-     * Loads an FXML document and returns its controller: an instance of ControllerBase.
+     * Loads an FXML document and returns a reference to its controller (an instance of Controller).
      *
-     * @throws IOException if the FXML could not be loaded.
+     * @throws IOException The FXML could not be loaded.
      */
     public static <T extends Controller> T loadFXML(String fxml, Class<T> controllerClass) throws IOException {
 
         // Load the FXML
         URL url = ClientApplication.class.getResource(fxml);
         FXMLLoader fxmlLoader = new FXMLLoader(url);
-        Parent page = fxmlLoader.load();
+        Parent root = fxmlLoader.load();
 
         // Remove 'Controller' from end of class name
         String name = controllerClass.getSimpleName();
         name = name.replaceAll("Controller$", "");
 
-        // Initialize and return...
+        // Initialize (internal) and return
         Controller controller = fxmlLoader.getController();
-        controller.initialize(page, name);
+        controller.initialize(root, name);
         return controllerClass.cast(controller);
     }
 }

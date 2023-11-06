@@ -1,7 +1,6 @@
 package com.restready.gui;
 
 import com.restready.gui.cashier.OrderEntryController;
-import com.restready.gui.cashier.TicketsOverviewController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -22,7 +21,7 @@ public class ClientApplication extends Application {
                 "/fxml/cashier/order-entry.fxml",
                 OrderEntryController.class);
 
-        Scene mainScene = new Scene(page.getPageRoot());
+        Scene mainScene = new Scene(page.getRoot());
         stage.setTitle("Restaurant Ready!");
         stage.setScene(mainScene);
         stage.show();
