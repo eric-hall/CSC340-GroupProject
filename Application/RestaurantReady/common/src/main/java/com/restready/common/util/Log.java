@@ -40,7 +40,7 @@ public class Log {
     }
 
     public static void error(Object category, String message, Throwable ex) {
-        if (ERROR) _logger.log(LogLevel.Error, category.toString(), message, ex);
+        if (ERROR) _logger.log(LogLevel.Error, category.getClass().getSimpleName(), message, ex);
     }
 
     public static void error(String message) {
@@ -48,7 +48,7 @@ public class Log {
     }
 
     public static void error(Object category, String message) {
-        if (ERROR) _logger.log(LogLevel.Error, category.toString(), message, null);
+        if (ERROR) _logger.log(LogLevel.Error, category.getClass().getSimpleName(), message, null);
     }
     //endregion
 
@@ -58,7 +58,7 @@ public class Log {
     }
 
     public static void warn(Object category, String message, Throwable ex) {
-        if (WARN) _logger.log(LogLevel.Warn, category.toString(), message, ex);
+        if (WARN) _logger.log(LogLevel.Warn, category.getClass().getSimpleName(), message, ex);
     }
 
     public static void warn(String message) {
@@ -66,7 +66,7 @@ public class Log {
     }
 
     public static void warn(Object category, String message) {
-        if (WARN) _logger.log(LogLevel.Warn, category.toString(), message, null);
+        if (WARN) _logger.log(LogLevel.Warn, category.getClass().getSimpleName(), message, null);
     }
     //endregion
 
@@ -76,7 +76,7 @@ public class Log {
     }
 
     public static void info(Object category, String message, Throwable ex) {
-        if (INFO) _logger.log(LogLevel.Info, category.toString(), message, ex);
+        if (INFO) _logger.log(LogLevel.Info, category.getClass().getSimpleName(), message, ex);
     }
 
     public static void info(String message) {
@@ -84,7 +84,7 @@ public class Log {
     }
 
     public static void info(Object category, String message) {
-        if (INFO) _logger.log(LogLevel.Info, category.toString(), message, null);
+        if (INFO) _logger.log(LogLevel.Info, category.getClass().getSimpleName(), message, null);
     }
     //endregion
 
@@ -94,7 +94,7 @@ public class Log {
     }
 
     public static void debug(Object category, String message, Throwable ex) {
-        if (DEBUG) _logger.log(LogLevel.Debug, category.toString(), message, ex);
+        if (DEBUG) _logger.log(LogLevel.Debug, category.getClass().getSimpleName(), message, ex);
     }
 
     public static void debug(String message) {
@@ -102,7 +102,7 @@ public class Log {
     }
 
     public static void debug(Object category, String message) {
-        if (DEBUG) _logger.log(LogLevel.Debug, category.toString(), message, null);
+        if (DEBUG) _logger.log(LogLevel.Debug, category.getClass().getSimpleName(), message, null);
     }
     //endregion
 
@@ -112,7 +112,7 @@ public class Log {
     }
 
     public static void trace(Object category, String message, Throwable ex) {
-        if (TRACE) _logger.log(LogLevel.Trace, category.toString(), message, ex);
+        if (TRACE) _logger.log(LogLevel.Trace, category.getClass().getSimpleName(), message, ex);
     }
 
     public static void trace(String message) {
@@ -120,7 +120,7 @@ public class Log {
     }
 
     public static void trace(Object category, String message) {
-        if (TRACE) _logger.log(LogLevel.Trace, category.toString(), message, null);
+        if (TRACE) _logger.log(LogLevel.Trace, category.getClass().getSimpleName(), message, null);
     }
     //endregion
 }

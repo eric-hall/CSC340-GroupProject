@@ -14,6 +14,11 @@ public abstract class Controller {
     private Parent _root;
     private String _name;
 
+    private void initialize(Parent root, String name) {
+        _root = root;
+        _name = name;
+    }
+
     public final Parent getRoot() {
         return _root;
     }
@@ -22,9 +27,19 @@ public abstract class Controller {
         return _name;
     }
 
-    private void initialize(Parent root, String name) {
-        _root = root;
-        _name = name;
+    public void onPageLoaded(PageNavigator navigator) {
+    }
+
+    public void onPageShow() {
+    }
+
+    public void onPageHide() {
+    }
+
+    public static String toName(Class<? extends Controller> controllerClass) {
+        // Remove 'Controller' from end of class name
+        String name = controllerClass.getSimpleName();
+        return name.replaceAll("Controller$", "");
     }
 
     /**
@@ -40,8 +55,7 @@ public abstract class Controller {
         Parent root = fxmlLoader.load();
 
         // Remove 'Controller' from end of class name
-        String name = controllerClass.getSimpleName();
-        name = name.replaceAll("Controller$", "");
+        String name = toName(controllerClass);
 
         // Initialize (internal) and return
         Controller controller = fxmlLoader.getController();
