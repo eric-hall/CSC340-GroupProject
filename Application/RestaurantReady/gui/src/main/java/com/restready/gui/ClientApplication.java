@@ -24,7 +24,7 @@ public class ClientApplication extends Application {
                 TicketsOverviewController.class,
                 "/fxml/cashier/tickets-overview.fxml");
 
-        navigator.navigateTo(OrderEntryController.class);
+        navigator.navigateTo(TicketsOverviewController.class);
 
         Scene mainScene = new Scene(root, 800, 600);
         stage.setTitle("Restaurant Ready!");

@@ -21,7 +21,16 @@ public class TicketsOverviewController extends Controller {
 
     @Override
     public void onPageLoaded(PageNavigator navigator) {
-        OrderEntryController otherPage = navigator.getOrLoadPage(OrderEntryController.class);
-        Log.debug(this, "Reference acquired: " + otherPage.getName());
+        defaultToolbarController.setOnToolbarBackButtonPressed(e -> navigator.navigateTo(OrderEntryController.class));
+    }
+
+    @Override
+    public void onPageShow() {
+        Log.debug(this, "onPageShow");
+    }
+
+    @Override
+    public void onPageHide() {
+        Log.debug(this, "onPageHide");
     }
 }
