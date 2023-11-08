@@ -1,27 +1,21 @@
 package com.restready.gui.cashier;
 
 import com.restready.common.util.Log;
-import com.restready.gui.Controller;
 import com.restready.gui.PageController;
-import com.restready.gui.PageNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 
 public class TicketsOverviewController extends PageController {
 
     @FXML
-    private Parent defaultToolbar;
+    private Parent toolbar;
     @FXML
-    private DefaultToolbarController defaultToolbarController;
+    private DefaultToolbarController toolbarController;
 
     @FXML
     public void initialize() {
-    }
-
-    @Override
-    public void onLoadedFromFXML(PageNavigator navigator) {
-        defaultToolbarController.setOnToolbarHomeButtonPressed(e -> navigator.navigateTo(ProfileSelectionController.class));
-        defaultToolbarController.setOnToolbarBackButtonPressed(e -> navigator.navigateTo(OrderEntryController.class));
+        toolbarController.setOnHomeButtonPressed(e -> navigateTo(ProfileSelectionController.class));
+        toolbarController.setOnBackButtonPressed(e -> navigateTo(OrderEntryController.class));
     }
 
     @Override

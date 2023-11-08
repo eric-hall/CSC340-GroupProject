@@ -7,7 +7,4 @@ public abstract class PageController extends Controller {
 
     public void onPageHide() {
     }
-
-    public void onLoadedFromFXML(PageNavigator navigator) {
-    }
 }

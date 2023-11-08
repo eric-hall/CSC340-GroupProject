@@ -8,7 +8,7 @@
     <children>
         <BorderPane VBox.vgrow="ALWAYS">
             <top>
-                <fx:include fx:id="defaultToolbar" source="default-toolbar.fxml" />
+                <fx:include fx:id="toolbar" source="default-toolbar.fxml" />
             </top>
             <left>
                 <VBox prefHeight="560.0" prefWidth="200.0" BorderPane.alignment="CENTER">

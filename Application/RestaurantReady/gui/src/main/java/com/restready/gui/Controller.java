@@ -11,10 +11,12 @@ import java.net.URL;
  */
 public abstract class Controller {
 
+    private ClientApplication _app;
     private Parent _root;
     private String _name;
 
-    private void initialize(Parent root, String name) {
+    private void initialize(ClientApplication app, Parent root, String name) {
+        _app = app;
         _root = root;
         _name = name;
     }
@@ -27,12 +29,16 @@ public abstract class Controller {
         return _name;
     }
 
+    public final void navigateTo(Class<? extends PageController> page) {
+        _app.navigateTo(page);
+    }
+
     /**
      * Loads an FXML document and returns a reference to its Controller.
      *
      * @throws IOException The FXML could not be loaded.
      */
-    public static <T extends Controller> T loadFXML(String fxml, Class<T> controllerClass) throws IOException {
+    public static <T extends Controller> T loadFXML(ClientApplication app, String fxml, Class<T> controllerClass) throws IOException {
 
         // Load the FXML
         URL url = ClientApplication.class.getResource(fxml);
@@ -43,7 +49,7 @@ public abstract class Controller {
 
         // Initialize (internal) and return
         Controller controller = fxmlLoader.getController();
-        controller.initialize(root, name);
+        controller.initialize(app, root, name);
         return controllerClass.cast(controller);
     }
 }

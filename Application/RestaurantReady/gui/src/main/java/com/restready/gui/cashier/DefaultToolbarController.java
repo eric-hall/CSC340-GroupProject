@@ -10,21 +10,21 @@ import javafx.scene.control.Label;
 public class DefaultToolbarController extends EmbeddedController {
 
     @FXML
-    private Button toolbarBackButton;
+    private Button backButton;
     @FXML
-    private Button toolbarHomeButton;
+    private Button homeButton;
     @FXML
-    private Label toolbarLabel;
+    private Label mainLabel;
 
     public void setToolbarLabelText(String text) {
-        toolbarLabel.setText(text);
+        mainLabel.setText(text);
     }
 
-    public void setOnToolbarBackButtonPressed(EventHandler<ActionEvent> action) {
-        toolbarBackButton.setOnAction(action);
+    public void setOnBackButtonPressed(EventHandler<ActionEvent> action) {
+        backButton.setOnAction(action);
     }
 
-    public void setOnToolbarHomeButtonPressed(EventHandler<ActionEvent> action) {
-        toolbarHomeButton.setOnAction(action);
+    public void setOnHomeButtonPressed(EventHandler<ActionEvent> action) {
+        homeButton.setOnAction(action);
     }
 }
