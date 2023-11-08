@@ -1,6 +1,6 @@
 package com.restready.gui;
 
-public class PageController extends Controller {
+public abstract class PageController extends Controller {
 
     public void onPageShow() {
     }

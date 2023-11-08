@@ -1,4 +1,4 @@
 package com.restready.gui;
 
-public class EmbeddedController extends Controller {
+public abstract class EmbeddedController extends Controller {
 }

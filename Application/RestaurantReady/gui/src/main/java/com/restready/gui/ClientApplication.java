@@ -5,6 +5,7 @@ import com.restready.gui.cashier.ProfileSelectionController;
 import com.restready.gui.cashier.TicketsOverviewController;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -13,24 +14,24 @@ public class ClientApplication extends Application {
     @Override
     public void start(Stage stage) {
 
-        StackPane root = new StackPane();
+        PageNavigator pages = new PageNavigator(); // Main Scene
 
-        PageNavigator navigator = new PageNavigator(root);
-        navigator.registerPageFXML(
+        pages.registerPageFXML(
                 ProfileSelectionController.class,
                 "/fxml/cashier/profile-selection.fxml");
-        navigator.registerPageFXML(
+        pages.registerPageFXML(
                 TicketsOverviewController.class,
                 "/fxml/cashier/tickets-overview.fxml");
-        navigator.registerPageFXML(
+        pages.registerPageFXML(
                 OrderEntryController.class,
                 "/fxml/cashier/order-entry.fxml");
 
-        navigator.navigateTo(OrderEntryController.class);
+        // Open the first page
+        pages.navigateTo(OrderEntryController.class);
 
-        Scene mainScene = new Scene(root, 800, 600);
+        // Initialize the stage
         stage.setTitle("Restaurant Ready!");
-        stage.setScene(mainScene);
+        stage.setScene(pages.getMainScene());
         stage.show();
     }
 

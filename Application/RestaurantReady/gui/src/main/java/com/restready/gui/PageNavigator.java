@@ -1,7 +1,8 @@
 package com.restready.gui;
 
 import com.restready.common.util.Log;
-import javafx.scene.layout.StackPane;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -12,16 +13,20 @@ public class PageNavigator {
         // Container for lazy initialization info
     }
 
-    private final StackPane _stackContainer;
+    private final Scene _mainScene;
     private final HashMap<Class<? extends PageController>, PageController> _loadedPages;
     private final HashMap<Class<? extends PageController>, PageControllerInfo> _unloadedPages;
     private PageController _currentPage;
 
-    public PageNavigator(StackPane container) {
-        _stackContainer = container;
+    public PageNavigator() {
+        _mainScene = new Scene(new Pane(), 800, 600);
         _loadedPages = new HashMap<>();
         _unloadedPages = new HashMap<>();
         _currentPage = null;
+    }
+
+    public Scene getMainScene() {
+        return _mainScene;
     }
 
     public <T extends PageController> void registerPageFXML(Class<T> controllerClass, String fxmlPath) {
@@ -47,8 +52,7 @@ public class PageNavigator {
             _currentPage.onPageHide();
         }
 
-        _stackContainer.getChildren().clear();
-        _stackContainer.getChildren().add(page.getRoot());
+        _mainScene.setRoot(page.getRoot());
         page.onPageShow();
         _currentPage = page;
     }
