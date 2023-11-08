@@ -8,8 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class ClientApplication extends Application {
 
     @Override
@@ -18,17 +16,17 @@ public class ClientApplication extends Application {
         StackPane root = new StackPane();
 
         PageNavigator navigator = new PageNavigator(root);
-        navigator.registerFXML(
+        navigator.registerPageFXML(
                 ProfileSelectionController.class,
                 "/fxml/cashier/profile-selection.fxml");
-        navigator.registerFXML(
+        navigator.registerPageFXML(
                 TicketsOverviewController.class,
                 "/fxml/cashier/tickets-overview.fxml");
-        navigator.registerFXML(
+        navigator.registerPageFXML(
                 OrderEntryController.class,
                 "/fxml/cashier/order-entry.fxml");
 
-        navigator.navigateTo(ProfileSelectionController.class);
+        navigator.navigateTo(OrderEntryController.class);
 
         Scene mainScene = new Scene(root, 800, 600);
         stage.setTitle("Restaurant Ready!");

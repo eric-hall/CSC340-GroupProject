@@ -27,21 +27,6 @@ public abstract class Controller {
         return _name;
     }
 
-    public void onLoadedFromFXML(PageNavigator navigator) {
-    }
-
-    public void onPageShow() {
-    }
-
-    public void onPageHide() {
-    }
-
-    public static String toName(Class<? extends Controller> controllerClass) {
-        // Remove 'Controller' from end of class name
-        String name = controllerClass.getSimpleName();
-        return name.replaceAll("Controller$", "");
-    }
-
     /**
      * Loads an FXML document and returns a reference to its Controller.
      *
@@ -54,8 +39,7 @@ public abstract class Controller {
         FXMLLoader fxmlLoader = new FXMLLoader(url);
         Parent root = fxmlLoader.load();
 
-        // Remove 'Controller' from end of class name
-        String name = toName(controllerClass);
+        String name = controllerClass.getSimpleName();
 
         // Initialize (internal) and return
         Controller controller = fxmlLoader.getController();

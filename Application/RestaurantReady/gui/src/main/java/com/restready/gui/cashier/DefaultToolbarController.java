@@ -1,16 +1,13 @@
 package com.restready.gui.cashier;
 
+import com.restready.gui.EmbeddedController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-// TODO: Don't extend Controller -- extend some kind of "EmbeddedController" instead?
-//  - EmbeddedController class does not exist yet.
-//  - The Controller could provide a map to its EmbeddedControllers.
-//  - EmbeddedControllers will never be registered in PageNavigator.
-public class DefaultToolbarController {
+public class DefaultToolbarController extends EmbeddedController {
 
     @FXML
     private Button toolbarBackButton;

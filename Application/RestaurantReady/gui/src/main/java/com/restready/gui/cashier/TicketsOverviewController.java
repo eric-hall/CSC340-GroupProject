@@ -2,11 +2,12 @@ package com.restready.gui.cashier;
 
 import com.restready.common.util.Log;
 import com.restready.gui.Controller;
+import com.restready.gui.PageController;
 import com.restready.gui.PageNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 
-public class TicketsOverviewController extends Controller {
+public class TicketsOverviewController extends PageController {
 
     @FXML
     private Parent defaultToolbar;
