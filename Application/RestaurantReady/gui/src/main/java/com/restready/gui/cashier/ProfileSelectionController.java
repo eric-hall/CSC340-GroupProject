@@ -1,11 +1,11 @@
 package com.restready.gui.cashier;
 
 import com.restready.common.util.Log;
-import com.restready.gui.PageController;
+import com.restready.gui.Controller;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 
-public class ProfileSelectionController extends PageController {
+public class ProfileSelectionController extends Controller {
 
     @FXML
     private Parent toolbar;

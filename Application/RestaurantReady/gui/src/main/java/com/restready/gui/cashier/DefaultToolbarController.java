@@ -1,13 +1,12 @@
 package com.restready.gui.cashier;
 
-import com.restready.gui.EmbeddedController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public class DefaultToolbarController extends EmbeddedController {
+public class DefaultToolbarController {
 
     @FXML
     private Button backButton;

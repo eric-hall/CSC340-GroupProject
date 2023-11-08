@@ -15,14 +15,14 @@ import java.util.Map;
 
 public class ClientApplication extends Application {
 
-    private record PageControllerInfo(String fxmlPath, Class<? extends PageController> controllerClass) {
+    private record ControllerInfo(String fxmlPath, Class<? extends Controller> controllerClass) {
         // Container for lazy initialization info
     }
 
     private final Scene _mainScene;
-    private final Map<Class<? extends PageController>, PageController> _loadedPages;
-    private final Map<Class<? extends PageController>, PageControllerInfo> _unloadedPages;
-    private PageController _currentPage;
+    private final Map<Class<? extends Controller>, Controller> _loadedPages;
+    private final Map<Class<? extends Controller>, ControllerInfo> _unloadedPages;
+    private Controller _currentPage;
 
     public ClientApplication() {
         _mainScene = new Scene(new Pane(), 800, 600);
@@ -53,42 +53,25 @@ public class ClientApplication extends Application {
         stage.show();
     }
 
-    public <T extends PageController> void navigateTo(Class<T> controllerClass) {
-
-        PageController page = getOrLoadPage(controllerClass);
-        if (page == null) {
-            Log.error(this, "Cannot navigate to: "+ controllerClass.getSimpleName());
-            return;
-        }
-
-        if (_currentPage != null) {
-            _currentPage.onPageHide();
-        }
-
-        _mainScene.setRoot(page.getRoot());
-        page.onPageShow();
-        _currentPage = page;
-    }
-
-    private <T extends PageController> void registerPageFXML(Class<T> controllerClass, String fxmlPath) {
+    private <T extends Controller> void registerPageFXML(Class<T> controllerClass, String fxmlPath) {
 
         if (_loadedPages.containsKey(controllerClass) || _unloadedPages.containsKey(controllerClass)) {
             Log.error(this, "Cannot register %s multiple times: ".formatted(controllerClass.getSimpleName()));
             return;
         }
 
-        _unloadedPages.put(controllerClass, new PageControllerInfo(fxmlPath, controllerClass));
+        _unloadedPages.put(controllerClass, new ControllerInfo(fxmlPath, controllerClass));
     }
 
-    private <T extends PageController> T getOrLoadPage(Class<T> controllerClass) {
+    private <T extends Controller> T getOrLoadPage(Class<T> controllerClass) {
 
         // Page already loaded?
-        PageController page = _loadedPages.getOrDefault(controllerClass, null);
+        Controller page = _loadedPages.getOrDefault(controllerClass, null);
         if (page != null) {
             return controllerClass.cast(page);
         }
 
-        PageControllerInfo info = _unloadedPages.get(controllerClass);
+        ControllerInfo info = _unloadedPages.get(controllerClass);
         if (info == null) {
             Log.error(this, "No page found: " + controllerClass.getSimpleName());
             return null;
@@ -104,6 +87,23 @@ public class ClientApplication extends Application {
         }
 
         return controllerClass.cast(page);
+    }
+
+    public <T extends Controller> void navigateTo(Class<T> controllerClass) {
+
+        Controller page = getOrLoadPage(controllerClass);
+        if (page == null) {
+            Log.error(this, "Cannot navigate to: "+ controllerClass.getSimpleName());
+            return;
+        }
+
+        if (_currentPage != null) {
+            _currentPage.onPageHide();
+        }
+
+        _mainScene.setRoot(page.getRoot());
+        page.onPageShow();
+        _currentPage = page;
     }
 
     public static void main(String[] args) {
