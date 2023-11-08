@@ -6,7 +6,7 @@ import com.restready.gui.PageNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 
-public class OrderEntryController extends Controller {
+public class ProfileSelectionController extends Controller {
 
     @FXML
     private Parent defaultToolbar;
@@ -19,8 +19,6 @@ public class OrderEntryController extends Controller {
 
     @Override
     public void onLoadedFromFXML(PageNavigator navigator) {
-        defaultToolbarController.setOnToolbarHomeButtonPressed(e -> navigator.navigateTo(ProfileSelectionController.class));
-        defaultToolbarController.setOnToolbarBackButtonPressed(e -> navigator.navigateTo(TicketsOverviewController.class));
     }
 
     @Override

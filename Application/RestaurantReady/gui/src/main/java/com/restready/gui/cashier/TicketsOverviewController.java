@@ -18,7 +18,8 @@ public class TicketsOverviewController extends Controller {
     }
 
     @Override
-    public void onPageLoaded(PageNavigator navigator) {
+    public void onLoadedFromFXML(PageNavigator navigator) {
+        defaultToolbarController.setOnToolbarHomeButtonPressed(e -> navigator.navigateTo(ProfileSelectionController.class));
         defaultToolbarController.setOnToolbarBackButtonPressed(e -> navigator.navigateTo(OrderEntryController.class));
     }
 

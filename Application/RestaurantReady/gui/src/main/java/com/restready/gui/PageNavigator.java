@@ -38,7 +38,7 @@ public class PageNavigator {
 
         Controller page = getOrLoadPage(controllerClass);
         if (page == null) {
-            Log.error(this, "Page not loaded: "+ controllerClass.getSimpleName());
+            Log.error(this, "Cannot navigate to: "+ controllerClass.getSimpleName());
             return;
         }
 
@@ -63,7 +63,7 @@ public class PageNavigator {
 
         ControllerInfo info = _unloadedPages.get(controllerClass);
         if (info == null) {
-            Log.error(this, "No page found: " + controllerClass);
+            Log.error(this, "No page found: " + controllerClass.getSimpleName());
             return null;
         }
 
@@ -72,7 +72,7 @@ public class PageNavigator {
             page = Controller.loadFXML(info.fxmlPath(), info.controllerClass());
             _loadedPages.put(controllerClass, page);
             _unloadedPages.remove(controllerClass);
-            page.onPageLoaded(this);
+            page.onLoadedFromFXML(this);
         } catch (IOException e) {
             Log.error(this, "", e);
         }

@@ -27,7 +27,7 @@ public abstract class Controller {
         return _name;
     }
 
-    public void onPageLoaded(PageNavigator navigator) {
+    public void onLoadedFromFXML(PageNavigator navigator) {
     }
 
     public void onPageShow() {
@@ -43,7 +43,7 @@ public abstract class Controller {
     }
 
     /**
-     * Loads an FXML document and returns a reference to its controller (an instance of Controller).
+     * Loads an FXML document and returns a reference to its Controller.
      *
      * @throws IOException The FXML could not be loaded.
      */
