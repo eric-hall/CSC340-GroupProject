@@ -53,7 +53,7 @@ public class ClientApplication extends Application {
         stage.show();
     }
 
-    private <T extends Controller> void registerPageFXML(Class<T> controllerClass, String fxmlPath) {
+    public <T extends Controller> void registerPageFXML(Class<T> controllerClass, String fxmlPath) {
 
         if (_loadedPages.containsKey(controllerClass) || _unloadedPages.containsKey(controllerClass)) {
             Log.error(this, "Cannot register %s multiple times: ".formatted(controllerClass.getSimpleName()));
@@ -63,7 +63,7 @@ public class ClientApplication extends Application {
         _unloadedPages.put(controllerClass, new ControllerInfo(fxmlPath, controllerClass));
     }
 
-    private <T extends Controller> T getOrLoadPage(Class<T> controllerClass) {
+    public <T extends Controller> T getOrLoadPage(Class<T> controllerClass) {
 
         // Page already loaded?
         Controller page = _loadedPages.getOrDefault(controllerClass, null);
