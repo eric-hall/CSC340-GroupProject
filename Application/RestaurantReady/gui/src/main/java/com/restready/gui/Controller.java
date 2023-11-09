@@ -29,12 +29,12 @@ public abstract class Controller {
         return _name;
     }
 
-    public final <T extends Controller> void navigateTo(Class<T> page) {
-        _app.navigateTo(page);
-    }
-
     public final <T extends Controller> T getOrLoadPage(Class<T> page) {
         return _app.getOrLoadPage(page);
+    }
+
+    public final <T extends Controller> void navigateTo(Class<T> page) {
+        _app.navigateTo(page);
     }
 
     public void onPageShow() {

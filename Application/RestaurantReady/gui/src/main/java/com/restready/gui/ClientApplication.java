@@ -102,8 +102,8 @@ public class ClientApplication extends Application {
         }
 
         _mainScene.setRoot(page.getRoot());
-        page.onPageShow();
         _currentPage = page;
+        page.onPageShow();
     }
 
     public static void main(String[] args) {
