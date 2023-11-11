@@ -1,11 +1,11 @@
 package com.restready.gui.cashier;
 
 import com.restready.common.util.Log;
-import com.restready.gui.Controller;
+import com.restready.gui.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 
-public class OrderEntryController extends Controller {
+public class OrderEntryController extends PageController {
 
     @FXML
     private Parent toolbar;

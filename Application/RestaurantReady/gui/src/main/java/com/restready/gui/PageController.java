@@ -9,7 +9,7 @@ import java.net.URL;
 /**
  * Base class for custom GUI controllers.
  */
-public abstract class Controller {
+public abstract class PageController {
 
     private ClientApplication _app;
     private Parent _root;
@@ -29,11 +29,11 @@ public abstract class Controller {
         return _name;
     }
 
-    public final <T extends Controller> T getOrLoadPage(Class<T> page) {
+    public final <T extends PageController> T getOrLoadPage(Class<T> page) {
         return _app.getOrLoadPage(page);
     }
 
-    public final <T extends Controller> void navigateTo(Class<T> page) {
+    public final <T extends PageController> void navigateTo(Class<T> page) {
         _app.navigateTo(page);
     }
 
@@ -48,7 +48,7 @@ public abstract class Controller {
      *
      * @throws IOException The FXML could not be loaded.
      */
-    public static <T extends Controller> T loadFXML(ClientApplication app, String fxml, Class<T> controllerClass) throws IOException {
+    public static <T extends PageController> T loadFXML(ClientApplication app, String fxml, Class<T> controllerClass) throws IOException {
 
         // Load the FXML
         URL url = ClientApplication.class.getResource(fxml);
@@ -58,8 +58,8 @@ public abstract class Controller {
         String name = controllerClass.getSimpleName();
 
         // Initialize (internal) and return
-        Controller controller = fxmlLoader.getController();
-        controller.initialize(app, root, name);
-        return controllerClass.cast(controller);
+        PageController page = fxmlLoader.getController();
+        page.initialize(app, root, name);
+        return controllerClass.cast(page);
     }
 }

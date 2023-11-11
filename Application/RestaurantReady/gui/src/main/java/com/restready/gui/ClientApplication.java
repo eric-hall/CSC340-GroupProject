@@ -15,14 +15,14 @@ import java.util.Map;
 
 public class ClientApplication extends Application {
 
-    private record ControllerInfo(String fxmlPath, Class<? extends Controller> controllerClass) {
+    private record ControllerInfo(String fxmlPath, Class<? extends PageController> controllerClass) {
         // Container for lazy initialization info
     }
 
     private final Scene _mainScene;
-    private final Map<Class<? extends Controller>, Controller> _loadedPages;
-    private final Map<Class<? extends Controller>, ControllerInfo> _unloadedPages;
-    private Controller _currentPage;
+    private final Map<Class<? extends PageController>, PageController> _loadedPages;
+    private final Map<Class<? extends PageController>, ControllerInfo> _unloadedPages;
+    private PageController _currentPage;
 
     public ClientApplication() {
         _mainScene = new Scene(new Pane(), 800, 600);
@@ -53,7 +53,7 @@ public class ClientApplication extends Application {
         stage.show();
     }
 
-    public <T extends Controller> void registerPageFXML(Class<T> controllerClass, String fxmlPath) {
+    public <T extends PageController> void registerPageFXML(Class<T> controllerClass, String fxmlPath) {
 
         if (_loadedPages.containsKey(controllerClass) || _unloadedPages.containsKey(controllerClass)) {
             Log.error(this, "Cannot register %s multiple times: ".formatted(controllerClass.getSimpleName()));
@@ -63,10 +63,10 @@ public class ClientApplication extends Application {
         _unloadedPages.put(controllerClass, new ControllerInfo(fxmlPath, controllerClass));
     }
 
-    public <T extends Controller> T getOrLoadPage(Class<T> controllerClass) {
+    public <T extends PageController> T getOrLoadPage(Class<T> controllerClass) {
 
         // Page already loaded?
-        Controller page = _loadedPages.getOrDefault(controllerClass, null);
+        PageController page = _loadedPages.getOrDefault(controllerClass, null);
         if (page != null) {
             return controllerClass.cast(page);
         }
@@ -79,7 +79,7 @@ public class ClientApplication extends Application {
 
         // Lazy initialization
         try {
-            page = Controller.loadFXML(this, info.fxmlPath(), info.controllerClass());
+            page = PageController.loadFXML(this, info.fxmlPath(), info.controllerClass());
             _loadedPages.put(controllerClass, page);
             _unloadedPages.remove(controllerClass);
         } catch (IOException e) {
@@ -89,9 +89,9 @@ public class ClientApplication extends Application {
         return controllerClass.cast(page);
     }
 
-    public <T extends Controller> void navigateTo(Class<T> controllerClass) {
+    public <T extends PageController> void navigateTo(Class<T> controllerClass) {
 
-        Controller page = getOrLoadPage(controllerClass);
+        PageController page = getOrLoadPage(controllerClass);
         if (page == null) {
             Log.error(this, "Cannot navigate to: "+ controllerClass.getSimpleName());
             return;
