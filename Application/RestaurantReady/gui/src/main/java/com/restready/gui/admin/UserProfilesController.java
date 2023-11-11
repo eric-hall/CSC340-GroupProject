@@ -1,4 +1,4 @@
-package com.restready.admin;
+package com.restready.gui.admin;
 
 import com.restready.gui.PageController;
 
