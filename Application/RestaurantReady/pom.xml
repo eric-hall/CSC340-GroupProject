@@ -11,8 +11,8 @@
 
     <modules>
         <module>common</module>
-        <module>gui</module>
-        <module>api</module>
+        <module>client</module>
+        <module>server</module>
     </modules>
 
     <properties>
