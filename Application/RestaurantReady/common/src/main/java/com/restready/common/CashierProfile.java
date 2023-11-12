@@ -16,4 +16,10 @@ public class CashierProfile implements Serializable {
         id = UUID.randomUUID();
         openTickets = new HashMap<>();
     }
+
+    public CustomerTicket openNewCustomerTicket() {
+        CustomerTicket ticket = new CustomerTicket(this);
+        openTickets.put(ticket.getId(), ticket);
+        return ticket;
+    }
 }

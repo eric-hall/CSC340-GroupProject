@@ -31,6 +31,10 @@ public class ClientApplication extends Application {
         _currentPage = null;
     }
 
+    public Scene getMainScene() {
+        return _mainScene;
+    }
+
     @Override
     public void start(Stage stage) {
 

@@ -3,6 +3,7 @@ package com.restready.client.gui.cashier;
 import com.restready.common.*;
 import com.restready.common.util.Log;
 import com.restready.client.gui.PageController;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
@@ -13,39 +14,43 @@ import javafx.scene.text.TextAlignment;
 
 public class OrderEntryController extends PageController {
 
-    // TODO: Remove later
-    private static final ProductCatalog EXAMPLE_PRODUCT_CATALOG;
-    static {
-        EXAMPLE_PRODUCT_CATALOG = new ProductCatalog();
-        String[] spaceMenuOptions = {
-                "Cosmic Pizza", "Nebula Noodles", "Star Squid", "Sky Skewers",
-                "Meteor Mac", "Apollo Appetizer", "Astro Burger", "Solar Sushi",
-                "Space Sliders", "Veggie Voyager", "Black Hole Bites", "Solar Stir-Fry",
-                "Alien Toast", "Satellite Salad", "Martian Melt", "Quasar Queso",
-                "Galactic Grill", "Rocket Bowl", "Interstellar Pasta", "Comet Croissant"
-        };
-        for (String productName : spaceMenuOptions) {
-            EXAMPLE_PRODUCT_CATALOG.addProduct(new Product(productName, 0.0d));
-        }
-    }
-
     private static final int PRODUCTS_PER_ROW = 6;
     private static final int ROW_HEIGHT = 60; // Pixels
 
     //region Page content
-    private final ProductCatalog productCatalog = EXAMPLE_PRODUCT_CATALOG;
-    private final CashierProfile cashierProfile = new CashierProfile();
-    private final CustomerTicket customerTicket = new CustomerTicket(cashierProfile);
-    private final CustomerOrder incomingOrder = customerTicket.openNewCustomerOrder();
+    private final ProductCatalog productCatalog;
+    private final CashierProfile cashierProfile;
+    private final CustomerTicket customerTicket;
+    private final CustomerOrder incomingOrder;
     //endregion
+
+    public OrderEntryController() {
+        productCatalog = ProductCatalog.EXAMPLE_SPACE_THEME_PRODUCT_CATALOG;
+        cashierProfile = new CashierProfile();
+        customerTicket = cashierProfile.openNewCustomerTicket();
+        incomingOrder = customerTicket.openNewCustomerOrder();
+    }
 
     //region FXML references
     @FXML
     private ListView<CustomerOrderItem> customerOrderListView;
     @FXML
     private GridPane productGridPane;
+    @FXML
+    private Button removeButton;
+    @FXML
+    private Button splitButton;
+    @FXML
+    private Button modifyButton;
+    @FXML
+    private Button duplicateButton;
+    @FXML
+    private Button payButton;
+    @FXML
+    private Button submitButton;
     //endregion
 
+    //region Event handlers
     @FXML
     public void initialize() {
 
@@ -58,17 +63,26 @@ public class OrderEntryController extends PageController {
             productGridPane.getColumnConstraints().add(widthLimiter);
         }
 
-        // Initialize products GridPane: each cell button references a Product.
+        // Initialize products GridPane.
         int i = 0;
         for (Product product : productCatalog) {
+            Button button = new Button(product.getName());
+            button.setTextAlignment(TextAlignment.CENTER);
+            button.setWrapText(true);
+            button.setPrefSize(Double.MAX_VALUE, ROW_HEIGHT);
+            button.setOnAction(e -> onProductButtonPressed(product));
             int x = i % PRODUCTS_PER_ROW;
             int y = i / PRODUCTS_PER_ROW;
+            productGridPane.add(button, x, y);
             i += 1;
-            addProductOptionToGrid(product, x, y);
         }
     }
 
-    //region Event handlers
+    @FXML
+    private void onBackButtonPressed() {
+        navigateTo(TicketsOverviewController.class);
+    }
+
     @Override
     public void onPageShow() {
         Log.debug(this, "onPageShow");
@@ -80,21 +94,42 @@ public class OrderEntryController extends PageController {
         Log.debug(this, "onPageHide");
     }
 
-    private void handleProductButtonPressed(Product product) {
+    @FXML
+    private void onRemoveButtonPressed() {
+        Log.debug(this, "Remove Button Pressed");
+    }
+
+    @FXML
+    private void onSplitButtonPressed() {
+        Log.debug(this, "Split Button Pressed");
+    }
+
+    @FXML
+    private void onModifyButtonPressed() {
+        Log.debug(this, "Modify Button Pressed");
+    }
+
+    @FXML
+    private void onDuplicateButtonPressed() {
+        Log.debug(this, "Duplicate Button Pressed");
+    }
+
+    @FXML
+    private void onPayButtonPressed() {
+        Log.debug(this, "Pay Button Pressed");
+    }
+
+    @FXML
+    private void onSubmitButtonPressed() {
+        Log.debug(this, "Submit Button Pressed");
+    }
+
+    private void onProductButtonPressed(Product product) {
         Log.debug(this, String.format("'%s' Button Pressed".formatted(product.getName())));
         CustomerOrderItem item = incomingOrder.addProductToOrder(product);
         customerOrderListView.getItems().add(item);
     }
     //endregion
-
-    private void addProductOptionToGrid(Product product, int x, int y) {
-        Button button = new Button(product.getName());
-        button.setTextAlignment(TextAlignment.CENTER);
-        button.setWrapText(true);
-        button.setPrefSize(Double.MAX_VALUE, ROW_HEIGHT);
-        button.setOnAction(e -> handleProductButtonPressed(product));
-        productGridPane.add(button, x, y);
-    }
 
     private static class CustomerOrderItemCell extends ListCell<CustomerOrderItem> {
         @Override
