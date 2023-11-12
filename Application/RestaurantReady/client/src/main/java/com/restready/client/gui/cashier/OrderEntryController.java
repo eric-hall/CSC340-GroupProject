@@ -3,13 +3,15 @@ package com.restready.client.gui.cashier;
 import com.restready.common.*;
 import com.restready.common.util.Log;
 import com.restready.client.gui.PageController;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.StageStyle;
+
+import java.util.Optional;
 
 public class OrderEntryController extends PageController {
 
@@ -104,7 +106,33 @@ public class OrderEntryController extends PageController {
 
     @FXML
     private void onLabelButtonPressed() {
+
         Log.debug(this, "Label Button Pressed");
+
+        // Get selected item(s)
+        ObservableList<CustomerOrderItem> selection = customerOrderListView.getSelectionModel().getSelectedItems();
+        if (selection.isEmpty()) {
+            Log.warn(this, "Cannot label zero-sized selection");
+            return;
+        }
+
+        // Show a dialog pop-up to get text from the user
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.initStyle(StageStyle.UNDECORATED); // Borderless
+        dialog.setHeaderText(null);
+        dialog.setGraphic(null);
+        dialog.setContentText("Enter customer name or number:");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) { // OK button pressed
+            Log.debug(this, "Setting item labels: " + result.get());
+            for (CustomerOrderItem item : selection) {
+                item.setMainLabel(result.get());
+            }
+            customerOrderListView.refresh();
+        } else { // Cancel button pressed
+            Log.debug(this, "Cancel pressed");
+        }
     }
 
     @FXML
