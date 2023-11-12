@@ -62,7 +62,7 @@
                                                 <Insets />
                                             </GridPane.margin>
                                         </Button>
-                                        <Button fx:id="modifyButton" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="57.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onModifyButtonPressed" text="Modify" textAlignment="CENTER" GridPane.rowIndex="1">
+                                        <Button fx:id="labelButton" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="57.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onLabelButtonPressed" text="Label" textAlignment="CENTER" GridPane.rowIndex="1">
                                             <GridPane.margin>
                                                 <Insets />
                                             </GridPane.margin>

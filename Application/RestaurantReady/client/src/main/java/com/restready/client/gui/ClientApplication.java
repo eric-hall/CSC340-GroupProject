@@ -97,7 +97,7 @@ public class ClientApplication extends Application {
 
         PageController page = getOrLoadPage(controllerClass);
         if (page == null) {
-            Log.error(this, "Cannot navigate to: "+ controllerClass.getSimpleName());
+            Log.error(this, "Cannot navigate to: " + controllerClass.getSimpleName());
             return;
         }
 

@@ -3,7 +3,6 @@ package com.restready.client.gui.cashier;
 import com.restready.common.*;
 import com.restready.common.util.Log;
 import com.restready.client.gui.PageController;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
@@ -22,15 +21,6 @@ public class OrderEntryController extends PageController {
     private final CashierProfile cashierProfile;
     private final CustomerTicket customerTicket;
     private final CustomerOrder incomingOrder;
-    //endregion
-
-    public OrderEntryController() {
-        productCatalog = ProductCatalog.EXAMPLE_SPACE_THEME_PRODUCT_CATALOG;
-        cashierProfile = new CashierProfile();
-        customerTicket = cashierProfile.openNewCustomerTicket();
-        incomingOrder = customerTicket.openNewCustomerOrder();
-    }
-
     //region FXML references
     @FXML
     private ListView<CustomerOrderItem> customerOrderListView;
@@ -41,7 +31,7 @@ public class OrderEntryController extends PageController {
     @FXML
     private Button splitButton;
     @FXML
-    private Button modifyButton;
+    private Button labelButton;
     @FXML
     private Button duplicateButton;
     @FXML
@@ -49,6 +39,14 @@ public class OrderEntryController extends PageController {
     @FXML
     private Button submitButton;
     //endregion
+    //endregion
+
+    public OrderEntryController() {
+        productCatalog = ProductCatalog.EXAMPLE_SPACE_THEME_PRODUCT_CATALOG;
+        cashierProfile = new CashierProfile();
+        customerTicket = cashierProfile.openNewCustomerTicket();
+        incomingOrder = customerTicket.openNewCustomerOrder();
+    }
 
     //region Event handlers
     @FXML
@@ -105,8 +103,8 @@ public class OrderEntryController extends PageController {
     }
 
     @FXML
-    private void onModifyButtonPressed() {
-        Log.debug(this, "Modify Button Pressed");
+    private void onLabelButtonPressed() {
+        Log.debug(this, "Label Button Pressed");
     }
 
     @FXML
@@ -132,6 +130,7 @@ public class OrderEntryController extends PageController {
     //endregion
 
     private static class CustomerOrderItemCell extends ListCell<CustomerOrderItem> {
+
         @Override
         protected void updateItem(CustomerOrderItem item, boolean empty) {
             super.updateItem(item, empty);
@@ -139,7 +138,7 @@ public class OrderEntryController extends PageController {
                 setText(null);
             } else {
                 Product product = item.getProduct();
-                setText(String.format("%s - %s", item.getLabel(), product.getName()));
+                setText(String.format("[%s] - %s", item.getMainLabel(), product.getName()));
             }
         }
     }

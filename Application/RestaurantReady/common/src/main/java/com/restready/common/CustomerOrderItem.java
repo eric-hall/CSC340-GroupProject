@@ -12,12 +12,23 @@ public class CustomerOrderItem implements Serializable {
     private final UUID id;
     private final CustomerOrder order;
     private final Product product;
-    private String label;
+    private String mainLabel;
+    private String[] splitLabels;
 
     public CustomerOrderItem(CustomerOrder order, Product product) {
         this.id = UUID.randomUUID();
         this.order = order;
         this.product = product;
-        label = "";
+        mainLabel = "";
+        splitLabels = new String[0];
+    }
+
+    public int getSplitCount() {
+        return splitLabels.length;
+    }
+
+//    @Override
+    public void setSplitLabels(String... splitLabels) {
+        this.splitLabels = splitLabels;
     }
 }
