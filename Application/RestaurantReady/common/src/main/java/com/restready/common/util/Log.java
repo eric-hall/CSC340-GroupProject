@@ -5,25 +5,25 @@ public class Log {
 
     /** Compiling this and the booleans below as "final" will cause the compiler
      * to remove all "if (LogLevel.Info) ..." type statements below the set level. */
-    private static int _logLevel = LogLevel.Info;
+    private static int _logLevel = LogLevel.Debug;
     private static Logger _logger = new Logger();
 
-    public static boolean ERROR = (_logLevel | LogLevel.Error) > 0;
-    public static boolean WARN = (_logLevel | LogLevel.Warn) > 0;
-    public static boolean INFO = (_logLevel | LogLevel.Info) > 0;
-    public static boolean DEBUG = (_logLevel | LogLevel.Debug) > 0;
-    public static boolean TRACE = (_logLevel | LogLevel.Trace) > 0;
+    public static boolean ERROR = _logLevel <= LogLevel.Error;
+    public static boolean WARN = _logLevel <= LogLevel.Warn;
+    public static boolean INFO = _logLevel <= LogLevel.Info;
+    public static boolean DEBUG = _logLevel <= LogLevel.Debug;
+    public static boolean TRACE = _logLevel <= LogLevel.Trace;
 
     private Log() { }
 
     /** Comment out this method's body when compiling fixed-level JARs. */
     public static void setLogLevels(int level) {
         _logLevel = level;
-        ERROR = (_logLevel | LogLevel.Error) > 0;
-        WARN = (_logLevel | LogLevel.Warn) > 0;
-        INFO = (_logLevel | LogLevel.Info) > 0;
-        DEBUG = (_logLevel | LogLevel.Debug) > 0;
-        TRACE = (_logLevel | LogLevel.Trace) > 0;
+        ERROR = _logLevel <= LogLevel.Error;
+        WARN = _logLevel <= LogLevel.Warn;
+        INFO = _logLevel <= LogLevel.Info;
+        DEBUG = _logLevel <= LogLevel.Debug;
+        TRACE = _logLevel <= LogLevel.Trace;
     }
 
     public static int getLogLevel() {

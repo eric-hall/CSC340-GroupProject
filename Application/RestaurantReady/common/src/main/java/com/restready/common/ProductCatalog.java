@@ -5,11 +5,12 @@ import lombok.Getter;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.UUID;
 
 @Getter
 public class ProductCatalog implements Serializable, Iterable<Product> {
 
-    private final HashMap<Integer, Product> products;
+    private final HashMap<UUID, Product> products;
 
     public ProductCatalog() {
         products = new HashMap<>();
@@ -19,11 +20,11 @@ public class ProductCatalog implements Serializable, Iterable<Product> {
         products.put(product.getId(), product);
     }
 
-    public Product getProduct(int productId) {
+    public Product getProduct(UUID productId) {
         return products.get(productId);
     }
 
-    public boolean removeProduct(int id) {
+    public boolean removeProduct(UUID id) {
         return products.remove(id) != null;
     }
 

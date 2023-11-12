@@ -4,16 +4,23 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.UUID;
 
-@Getter @Setter
 public class Product implements Serializable {
 
-    private int id;
+    @Getter
+    private final UUID id;
+    @Getter @Setter
     private String name;
+    @Getter @Setter
     private double price;
 
-    public Product(int id, String name, double price) {
-        this.id = id;
+    public Product() {
+        this("", 0.0d);
+    }
+
+    public Product(String name, double price) {
+        id = UUID.randomUUID();
         this.name = name;
         this.price = price;
     }

@@ -1,8 +1,6 @@
 package com.restready.client.gui.cashier;
 
-import com.restready.common.CustomerOrderItem;
-import com.restready.common.Product;
-import com.restready.common.ProductCatalog;
+import com.restready.common.*;
 import com.restready.common.util.Log;
 import com.restready.client.gui.PageController;
 import javafx.fxml.FXML;
@@ -19,24 +17,34 @@ public class OrderEntryController extends PageController {
     private static final ProductCatalog EXAMPLE_PRODUCT_CATALOG;
     static {
         EXAMPLE_PRODUCT_CATALOG = new ProductCatalog();
-        String[] productNames = {
-                "Burger", "Pizza", "Mom's Spaghetti",
-                "Dad's Spaghetti", "Chicken Plate", "Salad",
-                "Ravioli", "Beef Special", "Sam's Hot-dog",
-                "Nachos", "Daily Soup", "Arancini"
+        String[] spaceMenuOptions = {
+                "Cosmic Pizza", "Nebula Noodles", "Star Squid", "Sky Skewers",
+                "Meteor Mac", "Apollo Appetizer", "Astro Burger", "Solar Sushi",
+                "Space Sliders", "Veggie Voyager", "Black Hole Bites", "Solar Stir-Fry",
+                "Alien Toast", "Satellite Salad", "Martian Melt", "Quasar Queso",
+                "Galactic Grill", "Rocket Bowl", "Interstellar Pasta", "Comet Croissant"
         };
-        for (int i = 0; i < productNames.length; ++i) {
-            EXAMPLE_PRODUCT_CATALOG.addProduct(new Product(i, productNames[i], 0.0d));
+        for (String productName : spaceMenuOptions) {
+            EXAMPLE_PRODUCT_CATALOG.addProduct(new Product(productName, 0.0d));
         }
     }
 
     private static final int PRODUCTS_PER_ROW = 6;
     private static final int ROW_HEIGHT = 60; // Pixels
 
+    //region Page content
+    private final ProductCatalog productCatalog = EXAMPLE_PRODUCT_CATALOG;
+    private final CashierProfile cashierProfile = new CashierProfile();
+    private final CustomerTicket customerTicket = new CustomerTicket(cashierProfile);
+    private final CustomerOrder incomingOrder = customerTicket.openNewCustomerOrder();
+    //endregion
+
+    //region FXML references
     @FXML
     private ListView<CustomerOrderItem> customerOrderListView;
     @FXML
     private GridPane productGridPane;
+    //endregion
 
     @FXML
     public void initialize() {
@@ -50,18 +58,21 @@ public class OrderEntryController extends PageController {
             productGridPane.getColumnConstraints().add(widthLimiter);
         }
 
-        // Initialize products GridPane: each cell contains a button referencing a Product.
-        Product[] products = EXAMPLE_PRODUCT_CATALOG.getProducts().values().toArray(new Product[0]);
-        for (int i = 0; i < products.length; ++i) {
+        // Initialize products GridPane: each cell button references a Product.
+        int i = 0;
+        for (Product product : productCatalog) {
             int x = i % PRODUCTS_PER_ROW;
             int y = i / PRODUCTS_PER_ROW;
-            addProductOptionToGrid(products[i], x, y);
+            i += 1;
+            addProductOptionToGrid(product, x, y);
         }
     }
 
+    //region Event handlers
     @Override
     public void onPageShow() {
         Log.debug(this, "onPageShow");
+        customerOrderListView.getSelectionModel().clearSelection();
     }
 
     @Override
@@ -70,10 +81,11 @@ public class OrderEntryController extends PageController {
     }
 
     private void handleProductButtonPressed(Product product) {
-        Log.info(this, product.getName() + " Pressed!");
-        CustomerOrderItem item = new CustomerOrderItem(-1, product.getId(), -1, ""); // TODO: Use real id's
+        Log.debug(this, String.format("'%s' Button Pressed".formatted(product.getName())));
+        CustomerOrderItem item = incomingOrder.addProductToOrder(product);
         customerOrderListView.getItems().add(item);
     }
+    //endregion
 
     private void addProductOptionToGrid(Product product, int x, int y) {
         Button button = new Button(product.getName());
@@ -91,7 +103,7 @@ public class OrderEntryController extends PageController {
             if (empty || item == null) {
                 setText(null);
             } else {
-                Product product = EXAMPLE_PRODUCT_CATALOG.getProduct(item.getProductId());
+                Product product = item.getProduct();
                 setText(String.format("%s - %s", item.getLabel(), product.getName()));
             }
         }

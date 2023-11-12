@@ -1,7 +1,19 @@
 package com.restready.common;
 
-import java.io.Serializable;
+import lombok.Getter;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.UUID;
+
+@Getter
 public class CashierProfile implements Serializable {
 
+    private final UUID id;
+    private final HashMap<UUID, CustomerTicket> openTickets;
+
+    public CashierProfile() {
+        id = UUID.randomUUID();
+        openTickets = new HashMap<>();
+    }
 }

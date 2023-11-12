@@ -3,18 +3,20 @@ package com.restready.common;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter @Setter
 public class CustomerOrderItem {
 
-    private int id;
-    private int productId;
-    private int cashierId;
+    private final UUID id;
+    private final CustomerOrder order;
+    private final Product product;
     private String label;
 
-    public CustomerOrderItem(int id, int productId, int cashierId, String label) {
-        this.id = id;
-        this.productId = productId;
-        this.cashierId = cashierId;
-        this.label = label;
+    public CustomerOrderItem(CustomerOrder order, Product product) {
+        this.id = UUID.randomUUID();
+        this.order = order;
+        this.product = product;
+        label = "";
     }
 }
