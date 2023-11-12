@@ -26,30 +26,24 @@ public class OrderEntryController extends PageController {
     @FXML
     private Parent toolbar;
     @FXML
-    private DefaultToolbarController toolbarController; // Temporary...
-    @FXML
     private GridPane gridPane;
 
     @FXML
     public void initialize() {
 
-        toolbarController.setOnBackButtonPressed(e -> navigateTo(TicketsOverviewController.class));
-
         // Set column constraints (per column)
         ColumnConstraints widthLimiter = new ColumnConstraints();
         widthLimiter.setPercentWidth(100.0d / ENTRIES_PER_ROW);
-        for (int i = 0; i < ENTRIES_PER_ROW; i++) {
+        for (int i = 0; i < ENTRIES_PER_ROW; ++i) {
             gridPane.getColumnConstraints().add(widthLimiter);
         }
 
-        int i = 0;
         OrderEntryController controller = this;
-        for (String buttonText : EXAMPLE_BUTTON_CONTENT) {
-            int x = i % ENTRIES_PER_ROW; // Column
-            int y = i / ENTRIES_PER_ROW; // Row
-            String buttonPressedText = buttonText + " Pressed!";
-            addProductItem(buttonText, e -> Log.info(controller, buttonPressedText), x, y);
-            i += 1;
+        for (int i = 0; i < EXAMPLE_BUTTON_CONTENT.length; ++i) {
+            int x = i % ENTRIES_PER_ROW;
+            int y = i / ENTRIES_PER_ROW;
+            String buttonPressedText = EXAMPLE_BUTTON_CONTENT[i] + " Pressed!";
+            addProductItem(EXAMPLE_BUTTON_CONTENT[i] , e -> Log.info(controller, buttonPressedText), x, y);
         }
     }
 

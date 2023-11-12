@@ -7,17 +7,6 @@ import javafx.scene.Parent;
 
 public class TicketsOverviewController extends PageController {
 
-    @FXML
-    private Parent toolbar;
-    @FXML
-    private DefaultToolbarController toolbarController;
-
-    @FXML
-    public void initialize() {
-        toolbarController.setOnHomeButtonPressed(e -> navigateTo(ProfileSelectionController.class));
-        toolbarController.setOnBackButtonPressed(e -> navigateTo(OrderEntryController.class));
-    }
-
     @Override
     public void onPageShow() {
         Log.debug(this, "onPageShow");

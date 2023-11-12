@@ -7,15 +7,6 @@ import javafx.scene.Parent;
 
 public class ProfileSelectionController extends PageController {
 
-    @FXML
-    private Parent toolbar;
-    @FXML
-    private DefaultToolbarController toolbarController;
-
-    @FXML
-    public void initialize() {
-    }
-
     @Override
     public void onPageShow() {
         Log.debug(this, "onPageShow");

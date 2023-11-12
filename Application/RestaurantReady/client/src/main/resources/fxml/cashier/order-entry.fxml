@@ -5,9 +5,6 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane prefHeight="600.0" prefWidth="800.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.restready.client.gui.cashier.OrderEntryController">
-    <top>
-        <fx:include fx:id="toolbar" source="default-toolbar.fxml" />
-    </top>
     <left>
         <VBox prefHeight="560.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
