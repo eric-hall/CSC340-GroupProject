@@ -6,7 +6,7 @@
 
 <BorderPane prefHeight="600.0" prefWidth="800.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.restready.client.gui.cashier.OrderEntryController">
     <left>
-        <VBox prefHeight="560.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <VBox prefHeight="560.0" prefWidth="240.0" BorderPane.alignment="CENTER">
             <children>
                 <SplitPane dividerPositions="0.75" orientation="VERTICAL" VBox.vgrow="ALWAYS">
                     <items>
@@ -16,7 +16,7 @@
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0">
                                             <children>
-                                                <ListView layoutX="-32.0" layoutY="134.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <ListView fx:id="customerOrderListView" editable="true" layoutX="19.6" layoutY="18.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                             </children>
                                         </AnchorPane>
                                     </content>
@@ -69,16 +69,25 @@
                 </SplitPane>
             </children>
             <BorderPane.margin>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
             </BorderPane.margin>
         </VBox>
     </left>
     <center>
         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
             <content>
-                <GridPane fx:id="gridPane" alignment="CENTER">
+                <GridPane fx:id="productGridPane" alignment="CENTER">
                 </GridPane>
             </content>
         </ScrollPane>
     </center>
+   <top>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <items>
+          <Button mnemonicParsing="false" text="Back" />
+            <Separator orientation="VERTICAL" prefHeight="40.0" />
+            <Label text="Label" />
+        </items>
+      </ToolBar>
+   </top>
 </BorderPane>
