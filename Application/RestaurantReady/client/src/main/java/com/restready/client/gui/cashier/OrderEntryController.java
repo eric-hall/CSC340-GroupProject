@@ -3,7 +3,6 @@ package com.restready.client.gui.cashier;
 import com.restready.common.*;
 import com.restready.common.util.Log;
 import com.restready.client.gui.PageController;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
@@ -114,14 +113,14 @@ public class OrderEntryController extends PageController {
         Log.trace(this, "Split Button Pressed");
 
         // Get selected item(s)
-        ObservableList<CustomerOrderCellData> selection = getSelectedCustomerOrderItems();
+        List<CustomerOrderCellData> selection = getSelectedCells();
         if (selection.isEmpty()) {
-            Log.warn(this, "Cannot split zero-sized selection: button should be disabled");
+            Log.warn(this, "Cannot split empty selection: button should be disabled");
             return;
         }
 
         // Show a dialog pop-up to get split count from the user
-        String dialogResponse = getUserResponseFromTextEntryDialog("Enter split count:", true);
+        String dialogResponse = textEntryDialog("Enter split count:", true);
 
         // Validate dialog response
         int splitCount;
@@ -144,25 +143,56 @@ public class OrderEntryController extends PageController {
         Log.trace(this, "Label Button Pressed");
 
         // Get selected item(s)
-        ObservableList<CustomerOrderCellData> selection = getSelectedCustomerOrderItems();
+        List<CustomerOrderCellData> selection = getSelectedCells();
         if (selection.isEmpty()) {
-            Log.warn(this, "Cannot label zero-sized selection");
+            Log.warn(this, "Cannot label empty selection");
             return;
         }
 
-        String customerLabelText = getUserResponseFromTextEntryDialog("Enter customer name or number:", false);
+        String customerLabel = textEntryDialog("Enter customer name or number:", false);
 
-        Log.debug(this, "Setting item labels: " + customerLabelText);
+        Log.debug(this, "Setting item labels: '%s'".formatted(customerLabel));
         for (CustomerOrderCellData cellData : selection) {
             CustomerOrderItem item = cellData.item();
-            item.setCustomerLabel(cellData.labelIndex, customerLabelText);
+            item.setCustomerLabel(cellData.labelIndex, customerLabel);
         }
+
         customerOrderListView.refresh();
     }
 
     @FXML
     private void onDuplicateButtonPressed() {
+
         Log.trace(this, "Duplicate Button Pressed");
+
+        // Get selected item(s)
+        List<CustomerOrderCellData> selection = getSelectedCells();
+        if (selection.isEmpty()) {
+            Log.warn(this, "Cannot dupe empty selection");
+            return;
+        }
+
+        // Ensure they're all un-submitted, non-split orders
+        for (CustomerOrderCellData cell : selection) {
+            if (!cell.isPartOfIncomingOrder() || cell.isSplitEntry()) {
+                Log.warn(this, "Cannot dupe submitted or split-entry orders");
+                return;
+            }
+        }
+
+        List<CustomerOrderCellData> orderList = customerOrderListView.getItems();
+        for (CustomerOrderCellData cell : selection) {
+
+            CustomerOrderItem item = cell.item;
+            String label = item.getCustomerLabel(cell.labelIndex);
+            if (!label.isBlank()) {
+                label += "(dupe)";
+            }
+
+            CustomerOrderItem dupe = incomingOrder.addProductToOrder(item.getProduct());
+            dupe.setCustomerLabel(0, label);
+            orderList.add(new CustomerOrderCellData(dupe, 0, true));
+        }
     }
 
     @FXML
@@ -180,42 +210,42 @@ public class OrderEntryController extends PageController {
         CustomerOrderItem item = incomingOrder.addProductToOrder(product);
         customerOrderListView.getItems().add(new CustomerOrderCellData(item, 0, true));
     }
-    //endregion
+    //endregionaaaaaaaaaaaaaaaaaaa
 
-    private void splitItems(ObservableList<CustomerOrderCellData> items, int splitCount) {
+    private void splitItems(List<CustomerOrderCellData> items, int splitCount) {
 
-        Log.debug(this, "Splitting %d items...".formatted(splitCount));
+        Log.debug(this, "Splitting %d items".formatted(splitCount));
 
-        ObservableList<CustomerOrderCellData> orderList = customerOrderListView.getItems();
-        for (CustomerOrderCellData cellData : items) {
+        List<CustomerOrderCellData> orderList = customerOrderListView.getItems();
+        for (CustomerOrderCellData cell : items) {
 
-            CustomerOrderItem item = cellData.item();
-            String originalLabel = item.getCustomerLabel(cellData.labelIndex);
+            CustomerOrderItem item = cell.item();
+            String customerLabel = item.getCustomerLabel(cell.labelIndex);
 
             // Overwrite the selected item's label
-            item.setCustomerLabel(cellData.labelIndex, originalLabel + "(0)");
+            item.setCustomerLabel(cell.labelIndex, customerLabel);
 
-            // Dupe the selected item's label (splitCount-1 times) and add a list entry for each
+            // Dupe the selected item's label (splitCount-1 times) and add a list entry
             int splitIndexOffset = item.getCustomerLabelsCount();
             for (int i = 0; i < splitCount - 1; ++i) {
 
                 int splitIndex = splitIndexOffset + i;
-                String splitLabel = "%s(%d)".formatted(originalLabel, i + 1);
-                item.addCustomerLabel(splitLabel);
+                item.addCustomerLabel(customerLabel);
 
-                CustomerOrderCellData entry = new CustomerOrderCellData(item, splitIndex, cellData.isPartOfIncomingOrder);
+                CustomerOrderCellData entry = new CustomerOrderCellData(item, splitIndex, cell.isPartOfIncomingOrder);
                 orderList.add(entry);
             }
         }
+
         customerOrderListView.refresh();
     }
 
-    private String getUserResponseFromTextEntryDialog(String prompt, boolean numeric) {
+    private String textEntryDialog(String prompt, boolean numeric) {
 
         TextInputDialog dialog = new TextInputDialog();
 
         // Borderless window and remove silly default header
-        dialog.initStyle(StageStyle.UNDECORATED);
+        dialog.initStyle(StageStyle.UTILITY);
         dialog.setHeaderText(null);
         dialog.setGraphic(null);
         dialog.setContentText(prompt);
@@ -231,17 +261,18 @@ public class OrderEntryController extends PageController {
         }
 
         Optional<String> userResponse = dialog.showAndWait();
-        return userResponse.orElse("");
+        String response = userResponse.orElse("");
+        return response.isBlank() && numeric ? "-1" : response;
     }
 
-    private ObservableList<CustomerOrderCellData> getSelectedCustomerOrderItems() {
+    private List<CustomerOrderCellData> getSelectedCells() {
         return customerOrderListView.getSelectionModel().getSelectedItems();
     }
 
     private record CustomerOrderCellData(CustomerOrderItem item, int labelIndex, boolean isPartOfIncomingOrder) {
 
         public boolean isSplitEntry() {
-            return item.getCustomerLabelsCount() >= 0;
+            return item.getCustomerLabelsCount() > 1;
         }
 
         public String getCellText() {
@@ -250,8 +281,13 @@ public class OrderEntryController extends PageController {
             String customerLabel = item.getCustomerLabel(labelIndex);
             String productName = item.getProduct().getName();
 
-            if (customerLabel.isBlank()) {
+            // TODO: Improve how split items are displayed (replace ListView with TreeView?)
+            if (isSplitEntry() && customerLabel.isBlank()) {
+                return "%s[Split %d] %s".formatted(submissionHint, labelIndex, productName);
+            } else if (customerLabel.isBlank()) {
                 return "%s %s".formatted(submissionHint, productName);
+            } else if (isSplitEntry()) {
+                return "%s[%s (Split %d)] %s".formatted(submissionHint, customerLabel, labelIndex, productName);
             }
 
             return "%s[%s] %s".formatted(submissionHint, customerLabel, productName);
