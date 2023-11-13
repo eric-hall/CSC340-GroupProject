@@ -210,7 +210,7 @@ public class OrderEntryController extends PageController {
         CustomerOrderItem item = incomingOrder.addProductToOrder(product);
         customerOrderListView.getItems().add(new CustomerOrderCellData(item, 0, true));
     }
-    //endregionaaaaaaaaaaaaaaaaaaa
+    //endregion
 
     private void splitItems(List<CustomerOrderCellData> items, int splitCount) {
 
