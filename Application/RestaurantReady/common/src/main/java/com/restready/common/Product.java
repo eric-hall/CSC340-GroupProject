@@ -32,4 +32,14 @@ public class Product implements Serializable {
         category = "";
         price = 0.0d;
     }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Product other && id.equals(other.id);
+    }
 }

@@ -1,7 +1,6 @@
 package com.restready.client.gui;
 
-import com.restready.client.gui.admin.ProductCatalogsController;
-import com.restready.common.util.Log;
+import com.restready.client.gui.admin.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -15,9 +14,9 @@ public class SamClientApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        ProductCatalogsController page = PageController.loadFXML(
-                null, "/fxml/admin/product-catalogs.fxml",
-                ProductCatalogsController.class);
+        PageController page = PageController.loadFXML(
+                null, "/fxml/admin/admin-home-page.fxml",
+                AdminHomePageController.class);
         Scene mainScene = new Scene(page.getRoot(), 800, 600);
         stage.setTitle("Restaurant Ready!");
         stage.setScene(mainScene);

@@ -23,6 +23,8 @@ public class OrderEntryController extends PageController {
     private CashierProfile cashierProfile;
     private CustomerTicket customerTicket;
     private CustomerOrder incomingOrder;
+    //endregion
+
     //region FXML references
     @FXML
     private ListView<CustomerOrderCellData> customerOrderListView;
@@ -40,7 +42,6 @@ public class OrderEntryController extends PageController {
     private Button payButton;
     @FXML
     private Button submitButton;
-    //endregion
     //endregion
 
     public OrderEntryController() {
