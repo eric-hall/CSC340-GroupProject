@@ -11,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.StageStyle;
 
+import java.util.List;
 import java.util.Optional;
 
 public class OrderEntryController extends PageController {
@@ -113,36 +114,20 @@ public class OrderEntryController extends PageController {
         Log.trace(this, "Split Button Pressed");
 
         // Get selected item(s)
-        ObservableList<CustomerOrderCellData> selection = customerOrderListView.getSelectionModel().getSelectedItems();
+        ObservableList<CustomerOrderCellData> selection = getSelectedCustomerOrderItems();
         if (selection.isEmpty()) {
-            Log.warn(this, "Cannot split zero-sized selection");
+            Log.warn(this, "Cannot split zero-sized selection: button should be disabled");
             return;
         }
 
         // Show a dialog pop-up to get split count from the user
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.initStyle(StageStyle.UNDECORATED); // Borderless
-        dialog.setHeaderText(null);
-        dialog.setGraphic(null);
-        dialog.setContentText("Enter split count:");
+        String dialogResponse = getUserResponseFromTextEntryDialog("Enter split count:", true);
 
-        // Filter input for integers only
-        TextField input = dialog.getEditor();
-        input.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!"\\d*".matches(newValue)) {
-                input.setText(newValue.replaceAll("\\D", ""));
-            }
-        });
-
-        Optional<String> userResponse = dialog.showAndWait();
-        if (userResponse.isEmpty()) {
-            return;
-        }
-
-        int splitCount; // Validate dialog response
+        // Validate dialog response
+        int splitCount;
         try {
-            splitCount = Integer.parseInt(userResponse.get());
-            if (splitCount < 1) {
+            splitCount = Integer.parseInt(dialogResponse);
+            if (splitCount < 2) {
                 return;
             }
         } catch (NumberFormatException e) {
@@ -150,30 +135,7 @@ public class OrderEntryController extends PageController {
             return;
         }
 
-        Log.debug(this, "Splitting %d items...".formatted(splitCount));
-
-        ObservableList<CustomerOrderCellData> orderList = customerOrderListView.getItems();
-        for (CustomerOrderCellData cellData : selection) {
-
-            CustomerOrderItem item = cellData.item();
-            String originalLabel = item.getCustomerLabel(cellData.labelIndex);
-
-            // Overwrite the selected item's label
-            item.setCustomerLabel(cellData.labelIndex, originalLabel + "(0)");
-
-            // Dupe the selected item's label (splitCount-1 times) and add a list entry for each
-            int splitIndexOffset = item.getCustomerLabelsCount();
-            for (int i = 0; i < splitCount - 1; ++i) {
-
-                int splitIndex = splitIndexOffset + i;
-                String splitLabel = "%s(%d)".formatted(originalLabel, i + 1);
-                item.addCustomerLabel(splitLabel);
-
-                CustomerOrderCellData entry = new CustomerOrderCellData(item, splitIndex, cellData.isPartOfIncomingOrder);
-                orderList.add(entry);
-            }
-        }
-        customerOrderListView.refresh();
+        splitItems(selection, splitCount);
     }
 
     @FXML
@@ -182,24 +144,13 @@ public class OrderEntryController extends PageController {
         Log.trace(this, "Label Button Pressed");
 
         // Get selected item(s)
-        ObservableList<CustomerOrderCellData> selection = customerOrderListView.getSelectionModel().getSelectedItems();
+        ObservableList<CustomerOrderCellData> selection = getSelectedCustomerOrderItems();
         if (selection.isEmpty()) {
             Log.warn(this, "Cannot label zero-sized selection");
             return;
         }
 
-        // Show a dialog pop-up to get text from the user
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.initStyle(StageStyle.UNDECORATED); // Borderless
-        dialog.setHeaderText(null);
-        dialog.setGraphic(null);
-        dialog.setContentText("Enter customer name or number:");
-
-        Optional<String> userResponse = dialog.showAndWait();
-        if (userResponse.isEmpty()) {
-            return;
-        }
-        String customerLabelText = userResponse.get();
+        String customerLabelText = getUserResponseFromTextEntryDialog("Enter customer name or number:", false);
 
         Log.debug(this, "Setting item labels: " + customerLabelText);
         for (CustomerOrderCellData cellData : selection) {
@@ -231,6 +182,62 @@ public class OrderEntryController extends PageController {
     }
     //endregion
 
+    private void splitItems(ObservableList<CustomerOrderCellData> items, int splitCount) {
+
+        Log.debug(this, "Splitting %d items...".formatted(splitCount));
+
+        ObservableList<CustomerOrderCellData> orderList = customerOrderListView.getItems();
+        for (CustomerOrderCellData cellData : items) {
+
+            CustomerOrderItem item = cellData.item();
+            String originalLabel = item.getCustomerLabel(cellData.labelIndex);
+
+            // Overwrite the selected item's label
+            item.setCustomerLabel(cellData.labelIndex, originalLabel + "(0)");
+
+            // Dupe the selected item's label (splitCount-1 times) and add a list entry for each
+            int splitIndexOffset = item.getCustomerLabelsCount();
+            for (int i = 0; i < splitCount - 1; ++i) {
+
+                int splitIndex = splitIndexOffset + i;
+                String splitLabel = "%s(%d)".formatted(originalLabel, i + 1);
+                item.addCustomerLabel(splitLabel);
+
+                CustomerOrderCellData entry = new CustomerOrderCellData(item, splitIndex, cellData.isPartOfIncomingOrder);
+                orderList.add(entry);
+            }
+        }
+        customerOrderListView.refresh();
+    }
+
+    private String getUserResponseFromTextEntryDialog(String prompt, boolean numeric) {
+
+        TextInputDialog dialog = new TextInputDialog();
+
+        // Borderless window and remove silly default header
+        dialog.initStyle(StageStyle.UNDECORATED);
+        dialog.setHeaderText(null);
+        dialog.setGraphic(null);
+        dialog.setContentText(prompt);
+
+        // Filter input for integers only?
+        if (numeric) {
+            TextField input = dialog.getEditor();
+            input.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!"\\d*".matches(newValue)) {
+                    input.setText(newValue.replaceAll("\\D", ""));
+                }
+            });
+        }
+
+        Optional<String> userResponse = dialog.showAndWait();
+        return userResponse.orElse("");
+    }
+
+    private ObservableList<CustomerOrderCellData> getSelectedCustomerOrderItems() {
+        return customerOrderListView.getSelectionModel().getSelectedItems();
+    }
+
     private record CustomerOrderCellData(CustomerOrderItem item, int labelIndex, boolean isPartOfIncomingOrder) {
 
         public boolean isSplitEntry() {
@@ -238,10 +245,16 @@ public class OrderEntryController extends PageController {
         }
 
         public String getCellText() {
+
             String submissionHint = isPartOfIncomingOrder ? "* " : "";
             String customerLabel = item.getCustomerLabel(labelIndex);
             String productName = item.getProduct().getName();
-            return "%s[%s] | %s".formatted(submissionHint, customerLabel, productName);
+
+            if (customerLabel.isBlank()) {
+                return "%s %s".formatted(submissionHint, productName);
+            }
+
+            return "%s[%s] %s".formatted(submissionHint, customerLabel, productName);
         }
     }
 

@@ -32,7 +32,7 @@ public class CustomerOrderItem implements Serializable {
 
         if (index < 0 || customerLabels.size() < index) {
             Log.error(this, "Split check label index out-of-bounds");
-            return "[ERROR]"; // Return bad value regardless
+            return "ERROR"; // Return bad value regardless
         }
 
         return customerLabels.get(index);
