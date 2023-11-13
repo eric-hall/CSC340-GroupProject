@@ -19,13 +19,13 @@ public class OrderEntryController extends PageController {
     private static final int ROW_HEIGHT = 60; // Pixels
 
     //region Page content
-    private final ProductCatalog productCatalog;
-    private final CashierProfile cashierProfile;
-    private final CustomerTicket customerTicket;
-    private final CustomerOrder incomingOrder;
+    private ProductCatalog productCatalog;
+    private CashierProfile cashierProfile;
+    private CustomerTicket customerTicket;
+    private CustomerOrder incomingOrder;
     //region FXML references
     @FXML
-    private ListView<CustomerOrderItem> customerOrderListView;
+    private ListView<CustomerOrderCellData> customerOrderListView;
     @FXML
     private GridPane productGridPane;
     @FXML
@@ -44,26 +44,17 @@ public class OrderEntryController extends PageController {
     //endregion
 
     public OrderEntryController() {
-        productCatalog = ProductCatalog.EXAMPLE_SPACE_THEME_PRODUCT_CATALOG;
         cashierProfile = new CashierProfile();
         customerTicket = cashierProfile.openNewCustomerTicket();
         incomingOrder = customerTicket.openNewCustomerOrder();
     }
 
-    //region Event handlers
-    @FXML
-    public void initialize() {
+    public void setProductCatalog(ProductCatalog productCatalog) {
 
-        customerOrderListView.setCellFactory(x -> new CustomerOrderItemCell());
-
-        // Set column constraints (per column)
-        ColumnConstraints widthLimiter = new ColumnConstraints();
-        widthLimiter.setPercentWidth(100.0d / PRODUCTS_PER_ROW);
-        for (int i = 0; i < PRODUCTS_PER_ROW; ++i) {
-            productGridPane.getColumnConstraints().add(widthLimiter);
-        }
+        this.productCatalog = productCatalog;
 
         // Initialize products GridPane.
+        productGridPane.getChildren().clear();
         int i = 0;
         for (Product product : productCatalog) {
             Button button = new Button(product.getName());
@@ -78,6 +69,23 @@ public class OrderEntryController extends PageController {
         }
     }
 
+    //region Event handlers
+    @FXML
+    private void initialize() {
+
+        customerOrderListView.setCellFactory(caller -> new CustomerOrderItemCell());
+        customerOrderListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        // Set column constraints (per column)
+        ColumnConstraints widthLimiter = new ColumnConstraints();
+        widthLimiter.setPercentWidth(100.0d / PRODUCTS_PER_ROW);
+        for (int i = 0; i < PRODUCTS_PER_ROW; ++i) {
+            productGridPane.getColumnConstraints().add(widthLimiter);
+        }
+
+        setProductCatalog(ProductCatalog.EXAMPLE_SPACE_THEME_PRODUCT_CATALOG);
+    }
+
     @FXML
     private void onBackButtonPressed() {
         navigateTo(TicketsOverviewController.class);
@@ -85,32 +93,96 @@ public class OrderEntryController extends PageController {
 
     @Override
     public void onPageShow() {
-        Log.debug(this, "onPageShow");
+        Log.trace(this, "onPageShow");
         customerOrderListView.getSelectionModel().clearSelection();
     }
 
     @Override
     public void onPageHide() {
-        Log.debug(this, "onPageHide");
+        Log.trace(this, "onPageHide");
     }
 
     @FXML
     private void onRemoveButtonPressed() {
-        Log.debug(this, "Remove Button Pressed");
+        Log.trace(this, "Remove Button Pressed");
     }
 
     @FXML
     private void onSplitButtonPressed() {
-        Log.debug(this, "Split Button Pressed");
+
+        Log.trace(this, "Split Button Pressed");
+
+        // Get selected item(s)
+        ObservableList<CustomerOrderCellData> selection = customerOrderListView.getSelectionModel().getSelectedItems();
+        if (selection.isEmpty()) {
+            Log.warn(this, "Cannot split zero-sized selection");
+            return;
+        }
+
+        // Show a dialog pop-up to get split count from the user
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.initStyle(StageStyle.UNDECORATED); // Borderless
+        dialog.setHeaderText(null);
+        dialog.setGraphic(null);
+        dialog.setContentText("Enter split count:");
+
+        // Filter input for integers only
+        TextField input = dialog.getEditor();
+        input.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!"\\d*".matches(newValue)) {
+                input.setText(newValue.replaceAll("\\D", ""));
+            }
+        });
+
+        Optional<String> userResponse = dialog.showAndWait();
+        if (userResponse.isEmpty()) {
+            return;
+        }
+
+        int splitCount; // Validate dialog response
+        try {
+            splitCount = Integer.parseInt(userResponse.get());
+            if (splitCount < 1) {
+                return;
+            }
+        } catch (NumberFormatException e) {
+            Log.error(this, "Dialog expected integer: ", e);
+            return;
+        }
+
+        Log.debug(this, "Splitting %d items...".formatted(splitCount));
+
+        ObservableList<CustomerOrderCellData> orderList = customerOrderListView.getItems();
+        for (CustomerOrderCellData cellData : selection) {
+
+            CustomerOrderItem item = cellData.item();
+            String originalLabel = item.getCustomerLabel(cellData.labelIndex);
+
+            // Overwrite the selected item's label
+            item.setCustomerLabel(cellData.labelIndex, originalLabel + "(0)");
+
+            // Dupe the selected item's label (splitCount-1 times) and add a list entry for each
+            int splitIndexOffset = item.getCustomerLabelsCount();
+            for (int i = 0; i < splitCount - 1; ++i) {
+
+                int splitIndex = splitIndexOffset + i;
+                String splitLabel = "%s(%d)".formatted(originalLabel, i + 1);
+                item.addCustomerLabel(splitLabel);
+
+                CustomerOrderCellData entry = new CustomerOrderCellData(item, splitIndex, cellData.isPartOfIncomingOrder);
+                orderList.add(entry);
+            }
+        }
+        customerOrderListView.refresh();
     }
 
     @FXML
     private void onLabelButtonPressed() {
 
-        Log.debug(this, "Label Button Pressed");
+        Log.trace(this, "Label Button Pressed");
 
         // Get selected item(s)
-        ObservableList<CustomerOrderItem> selection = customerOrderListView.getSelectionModel().getSelectedItems();
+        ObservableList<CustomerOrderCellData> selection = customerOrderListView.getSelectionModel().getSelectedItems();
         if (selection.isEmpty()) {
             Log.warn(this, "Cannot label zero-sized selection");
             return;
@@ -123,51 +195,69 @@ public class OrderEntryController extends PageController {
         dialog.setGraphic(null);
         dialog.setContentText("Enter customer name or number:");
 
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) { // OK button pressed
-            Log.debug(this, "Setting item labels: " + result.get());
-            for (CustomerOrderItem item : selection) {
-                item.setMainLabel(result.get());
-            }
-            customerOrderListView.refresh();
-        } else { // Cancel button pressed
-            Log.debug(this, "Cancel pressed");
+        Optional<String> userResponse = dialog.showAndWait();
+        if (userResponse.isEmpty()) {
+            return;
         }
+        String customerLabelText = userResponse.get();
+
+        Log.debug(this, "Setting item labels: " + customerLabelText);
+        for (CustomerOrderCellData cellData : selection) {
+            CustomerOrderItem item = cellData.item();
+            item.setCustomerLabel(cellData.labelIndex, customerLabelText);
+        }
+        customerOrderListView.refresh();
     }
 
     @FXML
     private void onDuplicateButtonPressed() {
-        Log.debug(this, "Duplicate Button Pressed");
+        Log.trace(this, "Duplicate Button Pressed");
     }
 
     @FXML
     private void onPayButtonPressed() {
-        Log.debug(this, "Pay Button Pressed");
+        Log.trace(this, "Pay Button Pressed");
     }
 
     @FXML
     private void onSubmitButtonPressed() {
-        Log.debug(this, "Submit Button Pressed");
+        Log.trace(this, "Submit Button Pressed");
     }
 
     private void onProductButtonPressed(Product product) {
-        Log.debug(this, String.format("'%s' Button Pressed".formatted(product.getName())));
+        Log.trace(this, String.format("'%s' Button Pressed".formatted(product.getName())));
         CustomerOrderItem item = incomingOrder.addProductToOrder(product);
-        customerOrderListView.getItems().add(item);
+        customerOrderListView.getItems().add(new CustomerOrderCellData(item, 0, true));
     }
     //endregion
 
-    private static class CustomerOrderItemCell extends ListCell<CustomerOrderItem> {
+    private record CustomerOrderCellData(CustomerOrderItem item, int labelIndex, boolean isPartOfIncomingOrder) {
+
+        public boolean isSplitEntry() {
+            return item.getCustomerLabelsCount() >= 0;
+        }
+
+        public String getCellText() {
+            String submissionHint = isPartOfIncomingOrder ? "* " : "";
+            String customerLabel = item.getCustomerLabel(labelIndex);
+            String productName = item.getProduct().getName();
+            return "%s[%s] | %s".formatted(submissionHint, customerLabel, productName);
+        }
+    }
+
+    private static class CustomerOrderItemCell extends ListCell<CustomerOrderCellData> {
 
         @Override
-        protected void updateItem(CustomerOrderItem item, boolean empty) {
+        protected void updateItem(CustomerOrderCellData item, boolean empty) {
+
             super.updateItem(item, empty);
+
             if (empty || item == null) {
                 setText(null);
-            } else {
-                Product product = item.getProduct();
-                setText(String.format("[%s] - %s", item.getMainLabel(), product.getName()));
+                return;
             }
+
+            setText(String.format(item.getCellText()));
         }
     }
 }

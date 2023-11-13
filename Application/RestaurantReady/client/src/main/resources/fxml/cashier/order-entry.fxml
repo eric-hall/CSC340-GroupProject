@@ -28,7 +28,7 @@
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0">
                                             <children>
-                                                <ListView fx:id="customerOrderListView" editable="true" layoutX="19.6" layoutY="18.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <ListView fx:id="customerOrderListView" layoutX="19.6" layoutY="18.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                             </children>
                                         </AnchorPane>
                                     </content>
