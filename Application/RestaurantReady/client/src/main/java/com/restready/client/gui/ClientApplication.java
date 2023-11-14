@@ -1,9 +1,8 @@
 package com.restready.client.gui;
 
 import com.restready.common.util.Log;
-import com.restready.client.gui.cashier.OrderEntryController;
-import com.restready.client.gui.cashier.ProfileSelectionController;
-import com.restready.client.gui.cashier.TicketsOverviewController;
+import com.restready.client.gui.admin.*;
+import com.restready.client.gui.cashier.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -31,32 +30,31 @@ public class ClientApplication extends Application {
         _currentPage = null;
     }
 
-    public Scene getMainScene() {
-        return _mainScene;
-    }
-
     @Override
     public void start(Stage stage) {
 
+//        registerPageFXML(
+//                ProfileSelectionController.class,
+//                "/fxml/cashier/profile-selection.fxml");
+//        registerPageFXML(
+//                TicketsOverviewController.class,
+//                "/fxml/cashier/tickets-overview.fxml");
         registerPageFXML(
-                ProfileSelectionController.class,
-                "/fxml/cashier/profile-selection.fxml");
-        registerPageFXML(
-                TicketsOverviewController.class,
-                "/fxml/cashier/tickets-overview.fxml");
+                ProductCatalogEditorController.class,
+                "/fxml/admin/product-catalog-editor.fxml");
         registerPageFXML(
                 OrderEntryController.class,
                 "/fxml/cashier/order-entry.fxml");
 
-        // Open the first page
-        navigateTo(OrderEntryController.class);
+        navigateTo(ProductCatalogEditorController.class);
+//        navigateTo(OrderEntryController.class);
 
-        // Initialize the stage
         stage.setTitle("Restaurant Ready!");
         stage.setScene(_mainScene);
         stage.show();
     }
 
+    //region PageController management
     public <T extends PageController> void registerPageFXML(Class<T> controllerClass, String fxmlPath) {
 
         if (_loadedPages.containsKey(controllerClass) || _unloadedPages.containsKey(controllerClass)) {
@@ -109,6 +107,7 @@ public class ClientApplication extends Application {
         _currentPage = page;
         page.onPageShow();
     }
+    //endregion
 
     public static void main(String[] args) {
         launch();

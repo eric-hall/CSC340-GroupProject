@@ -7,7 +7,8 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
-public class ProductCatalogsController extends PageController {
+/** Sam's original version */
+public class ProductCatalogEditorControllerPrototype extends PageController {
 
     //region FXML references
     @FXML
@@ -23,6 +24,7 @@ public class ProductCatalogsController extends PageController {
     //region Event handlers
     @FXML
     private void initialize() {
+
         productListView.setCellFactory(productListView -> new ListCell<>() {
             @Override
             protected void updateItem(Product product, boolean isEmpty) {
@@ -34,6 +36,7 @@ public class ProductCatalogsController extends PageController {
                 }
             }
         });
+
         productListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 nameInput.setText(newValue.getName());
@@ -94,7 +97,6 @@ public class ProductCatalogsController extends PageController {
             newProduct.setPrice(price);
             return newProduct;
         } catch (NumberFormatException e) {
-            // Handle invalid price format
             return null;
         }
     }

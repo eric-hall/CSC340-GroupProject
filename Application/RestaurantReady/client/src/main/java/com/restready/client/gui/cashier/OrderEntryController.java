@@ -1,5 +1,7 @@
 package com.restready.client.gui.cashier;
 
+import com.restready.client.gui.admin.AdminLoginController;
+import com.restready.client.gui.admin.ProductCatalogEditorController;
 import com.restready.common.*;
 import com.restready.common.util.Log;
 import com.restready.client.gui.PageController;
@@ -84,12 +86,14 @@ public class OrderEntryController extends PageController {
             productGridPane.getColumnConstraints().add(widthLimiter);
         }
 
-        setProductCatalog(ProductCatalog.EXAMPLE_SPACE_THEME_PRODUCT_CATALOG);
+//        setProductCatalog(ProductCatalogExample.SPACE_THEME);
     }
 
     @FXML
     private void onBackButtonPressed() {
-        navigateTo(TicketsOverviewController.class);
+//        navigateTo(TicketsOverviewController.class);
+        // TODO: Remove later (demo)
+        navigateTo(ProductCatalogEditorController.class);
     }
 
     @Override

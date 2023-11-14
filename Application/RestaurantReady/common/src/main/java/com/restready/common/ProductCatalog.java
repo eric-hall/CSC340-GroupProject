@@ -11,17 +11,6 @@ import java.util.UUID;
 @Getter
 public class ProductCatalog implements Serializable, Iterable<Product> {
 
-    // TODO: Remove later...
-    public static final ProductCatalog EXAMPLE_SPACE_THEME_PRODUCT_CATALOG;
-    static {
-        EXAMPLE_SPACE_THEME_PRODUCT_CATALOG = new ProductCatalog();
-        for (String productName : Product.EXAMPLE_SPACE_THEME_PRODUCT_NAMES) {
-            Product product = new Product();
-            product.setName(productName);
-            EXAMPLE_SPACE_THEME_PRODUCT_CATALOG.addProduct(product);
-        }
-    }
-
     private final HashMap<UUID, Product> products;
 
     public ProductCatalog() {

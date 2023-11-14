@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
 
-<Pane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.restready.client.gui.admin.ProductCatalogsController">
+<Pane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.restready.client.gui.admin.ProductCatalogEditorControllerPrototype">
     <VBox alignment="CENTER" spacing="10">
         <HBox spacing="10">
             <TextField fx:id="nameInput" promptText="Name"/>

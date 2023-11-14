@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.restready.client.gui.cashier.OrderEntryController">
+<BorderPane prefHeight="600.0" prefWidth="800.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.restready.client.gui.cashier.OrderEntryController">
     <left>
         <VBox prefHeight="560.0" prefWidth="240.0" BorderPane.alignment="CENTER">
             <children>
@@ -47,7 +35,7 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
-                                        <Button fx:id="payButton" alignment="CENTER" contentDisplay="CENTER" layoutX="110.0" layoutY="97.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onPayButtonPressed" text="Pay" textAlignment="CENTER" GridPane.rowIndex="2">
+                                        <Button fx:id="payButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="110.0" layoutY="97.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onPayButtonPressed" text="Pay" textAlignment="CENTER" GridPane.rowIndex="2">
                                             <GridPane.margin>
                                                 <Insets />
                                             </GridPane.margin>
@@ -57,7 +45,7 @@
                                                 <Insets />
                                             </GridPane.margin>
                                         </Button>
-                                        <Button fx:id="removeButton" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRemoveButtonPressed" text="Remove" textAlignment="CENTER">
+                                        <Button fx:id="removeButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="14.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRemoveButtonPressed" text="Remove" textAlignment="CENTER">
                                             <GridPane.margin>
                                                 <Insets />
                                             </GridPane.margin>
@@ -72,7 +60,7 @@
                                                 <Insets />
                                             </GridPane.margin>
                                         </Button>
-                                        <Button fx:id="submitButton" alignment="CENTER" contentDisplay="CENTER" layoutX="110.0" layoutY="112.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSubmitButtonPressed" text="Submit" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                        <Button fx:id="submitButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="110.0" layoutY="112.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSubmitButtonPressed" text="Submit" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     </children>
                                 </GridPane>
                             </children>

@@ -1,6 +1,8 @@
 package com.restready.client.gui.admin;
 
+import com.restready.client.gui.ClientApplication;
 import com.restready.client.gui.PageController;
+import com.restready.client.gui.cashier.OrderEntryController;
 import com.restready.common.Product;
 import com.restready.common.ProductCatalog;
 import com.restready.common.util.Log;
@@ -12,11 +14,13 @@ import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 
 import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.regex.Pattern;
 
-public class AdminHomePageController extends PageController {
+public class ProductCatalogEditorController extends PageController {
 
-    //region State
+    //region Page content
     private ProductCatalog productCatalog;
     private boolean productCatalogDirty;
     //endregion
@@ -33,7 +37,7 @@ public class AdminHomePageController extends PageController {
     //endregion
 
     //region Initialization
-    public AdminHomePageController() {
+    public ProductCatalogEditorController() {
         productCatalog = new ProductCatalog();
         productCatalogDirty = false;
     }
@@ -59,9 +63,7 @@ public class AdminHomePageController extends PageController {
         });
 
         // Format product price text field as double
-        // TODO: Limit to 2 decimal places
         StringConverter<Double> converter = new StringConverter<>() {
-
             @Override
             public Double fromString(String s) {
                 if (s.isEmpty() || "-".equals(s) || ".".equals(s) || "-.".equals(s)) {
@@ -69,13 +71,13 @@ public class AdminHomePageController extends PageController {
                 }
                 return Double.valueOf(s);
             }
-
             @Override
             public String toString(Double d) {
                 return d.toString();
             }
         };
 
+        // TODO: Limit to 2 decimal places?
         Pattern pattern = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
         TextFormatter<Double> textFormatter = new TextFormatter<>(converter, 0.0d, filter -> {
             if (pattern.matcher(filter.getControlNewText()).matches()) {
@@ -84,6 +86,19 @@ public class AdminHomePageController extends PageController {
             return null;
         });
         productPriceTextField.setTextFormatter(textFormatter);
+
+        // TODO: Remove later...
+        try {
+            URL url = ClientApplication.class.getResource("/temp/restaurant-menu.txt");
+            if (url != null) {
+                productCatalog = ProductCatalogSaveLoad.loadFrom(new File(url.toURI()));
+                for (Product product : productCatalog) {
+                    productCatalogTableView.getItems().add(product);
+                }
+            }
+        } catch (URISyntaxException e) {
+            Log.error(this, "Demo failed -_-;;", e);
+        }
     }
     //endregion
 
@@ -117,6 +132,7 @@ public class AdminHomePageController extends PageController {
         }
 
         resetProductTable();
+        resetProductTextFields();
 
         productCatalog = ProductCatalogSaveLoad.loadFrom(file);
         for (Product product : productCatalog) {
@@ -138,6 +154,18 @@ public class AdminHomePageController extends PageController {
 
         ProductCatalogSaveLoad.saveTo(file, productCatalog);
         productCatalogDirty = false;
+    }
+
+    @FXML // TODO: Remove later (demo)
+    public void onMenuOpenOrderEntry() {
+
+        if (!confirmChangesMade()) {
+            return;
+        }
+
+        OrderEntryController page = getOrLoadPage(OrderEntryController.class);
+        page.setProductCatalog(productCatalog);
+        navigateTo(OrderEntryController.class);
     }
     //endregion
 
@@ -247,5 +275,4 @@ public class AdminHomePageController extends PageController {
         return product;
     }
     //endregion
-
 }
