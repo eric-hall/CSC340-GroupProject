@@ -31,7 +31,7 @@ public class OrderEntryController extends PageController {
     @FXML
     private ListView<CustomerOrderCellData> customerOrderListView;
     @FXML
-    private GridPane productGridPane;
+    private ProductCatalogBrowserController productCatalogBrowserController;
     @FXML
     private Button removeButton;
     @FXML
@@ -52,24 +52,9 @@ public class OrderEntryController extends PageController {
         incomingOrder = customerTicket.openNewCustomerOrder();
     }
 
-    public void setProductCatalog(ProductCatalog productCatalog) {
-
-        this.productCatalog = productCatalog;
-
-        // Initialize products GridPane.
-        productGridPane.getChildren().clear();
-        int i = 0;
-        for (Product product : productCatalog) {
-            Button button = new Button(product.getName());
-            button.setTextAlignment(TextAlignment.CENTER);
-            button.setWrapText(true);
-            button.setPrefSize(Double.MAX_VALUE, ROW_HEIGHT);
-            button.setOnAction(e -> onProductButtonPressed(product));
-            int x = i % PRODUCTS_PER_ROW;
-            int y = i / PRODUCTS_PER_ROW;
-            productGridPane.add(button, x, y);
-            i += 1;
-        }
+    public void setProductCatalog(ProductCatalog catalog) {
+        productCatalog = catalog;
+        productCatalogBrowserController.setProductCatalog(catalog);
     }
 
     //region Event handlers
@@ -78,13 +63,7 @@ public class OrderEntryController extends PageController {
 
         customerOrderListView.setCellFactory(caller -> new CustomerOrderItemCell());
         customerOrderListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-        // Set column constraints (per column)
-        ColumnConstraints widthLimiter = new ColumnConstraints();
-        widthLimiter.setPercentWidth(100.0d / PRODUCTS_PER_ROW);
-        for (int i = 0; i < PRODUCTS_PER_ROW; ++i) {
-            productGridPane.getColumnConstraints().add(widthLimiter);
-        }
+        productCatalogBrowserController.setProductButtonPressedHandler(this::onProductButtonPressed);
 
 //        setProductCatalog(ProductCatalogExample.SPACE_THEME);
     }

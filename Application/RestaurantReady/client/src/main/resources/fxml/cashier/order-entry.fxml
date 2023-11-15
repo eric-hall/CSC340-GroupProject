@@ -74,12 +74,7 @@
         </VBox>
     </left>
     <center>
-        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
-            <content>
-                <GridPane fx:id="productGridPane" alignment="CENTER">
-                </GridPane>
-            </content>
-        </ScrollPane>
+        <fx:include fx:id="productCatalogBrowser" source="product-catalog-browser.fxml" BorderPane.alignment="CENTER"/>
     </center>
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
