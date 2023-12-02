@@ -158,11 +158,6 @@ public class ProductCatalogEditorController extends PageController {
 
     @FXML // TODO: Remove later (demo)
     public void onMenuOpenOrderEntry() {
-
-        if (!confirmChangesMade()) {
-            return;
-        }
-
         OrderEntryController page = getOrLoadPage(OrderEntryController.class);
         page.setProductCatalog(productCatalog);
         navigateTo(OrderEntryController.class);

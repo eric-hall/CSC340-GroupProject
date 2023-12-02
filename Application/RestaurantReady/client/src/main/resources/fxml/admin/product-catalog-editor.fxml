@@ -9,11 +9,6 @@
     <center>
         <TableView fx:id="productCatalogTableView">
             <columns>
-                <TableColumn editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="-1.0" resizable="false" text="UUID">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="id" />
-                    </cellValueFactory>
-                </TableColumn>
                 <TableColumn editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="-1.0" resizable="false" text="Name">
                     <cellValueFactory>
                         <PropertyValueFactory property="name" />

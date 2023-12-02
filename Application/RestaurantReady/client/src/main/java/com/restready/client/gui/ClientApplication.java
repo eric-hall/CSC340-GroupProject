@@ -24,7 +24,7 @@ public class ClientApplication extends Application {
     private PageController _currentPage;
 
     public ClientApplication() {
-        _mainScene = new Scene(new Pane(), 800, 600);
+        _mainScene = new Scene(new Pane());
         _loadedPages = new HashMap<>();
         _unloadedPages = new HashMap<>();
         _currentPage = null;
@@ -33,21 +33,13 @@ public class ClientApplication extends Application {
     @Override
     public void start(Stage stage) {
 
-//        registerPageFXML(
-//                ProfileSelectionController.class,
-//                "/fxml/cashier/profile-selection.fxml");
-//        registerPageFXML(
-//                TicketsOverviewController.class,
-//                "/fxml/cashier/tickets-overview.fxml");
         registerPageFXML(
                 ProductCatalogEditorController.class,
                 "/fxml/admin/product-catalog-editor.fxml");
         registerPageFXML(
                 OrderEntryController.class,
                 "/fxml/cashier/order-entry.fxml");
-
         navigateTo(ProductCatalogEditorController.class);
-//        navigateTo(OrderEntryController.class);
 
         stage.setTitle("Restaurant Ready!");
         stage.setScene(_mainScene);

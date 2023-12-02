@@ -3,6 +3,6 @@
 
 <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS"
             xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.restready.client.gui.cashier.ProductCatalogBrowserController">
+            fx:controller="com.restready.client.gui.cashier.ProductSelectionController">
     <GridPane fx:id="productsGridPane" alignment="CENTER" />
 </ScrollPane>

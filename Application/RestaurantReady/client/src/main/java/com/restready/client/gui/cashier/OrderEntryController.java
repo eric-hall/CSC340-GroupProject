@@ -1,15 +1,11 @@
 package com.restready.client.gui.cashier;
 
-import com.restready.client.gui.admin.AdminLoginController;
 import com.restready.client.gui.admin.ProductCatalogEditorController;
 import com.restready.common.*;
 import com.restready.common.util.Log;
 import com.restready.client.gui.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.StageStyle;
 
 import java.util.List;
@@ -31,7 +27,7 @@ public class OrderEntryController extends PageController {
     @FXML
     private ListView<CustomerOrderCellData> customerOrderListView;
     @FXML
-    private ProductCatalogBrowserController productCatalogBrowserController;
+    private ProductSelectionController productSelectionController;
     @FXML
     private Button removeButton;
     @FXML
@@ -54,24 +50,20 @@ public class OrderEntryController extends PageController {
 
     public void setProductCatalog(ProductCatalog catalog) {
         productCatalog = catalog;
-        productCatalogBrowserController.setProductCatalog(catalog);
+        productSelectionController.setProductCatalog(catalog);
     }
 
     //region Event handlers
     @FXML
     private void initialize() {
-
         customerOrderListView.setCellFactory(caller -> new CustomerOrderItemCell());
         customerOrderListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        productCatalogBrowserController.setProductButtonPressedHandler(this::onProductButtonPressed);
-
-//        setProductCatalog(ProductCatalogExample.SPACE_THEME);
+        productSelectionController.setProductButtonPressedHandler(this::onProductButtonPressed);
     }
 
     @FXML
     private void onBackButtonPressed() {
 //        navigateTo(TicketsOverviewController.class);
-        // TODO: Remove later (demo)
         navigateTo(ProductCatalogEditorController.class);
     }
 

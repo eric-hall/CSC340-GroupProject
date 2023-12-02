@@ -74,7 +74,7 @@
         </VBox>
     </left>
     <center>
-        <fx:include fx:id="productCatalogBrowser" source="product-catalog-browser.fxml" BorderPane.alignment="CENTER"/>
+        <fx:include fx:id="productSelection" source="product-selection.fxml" BorderPane.alignment="CENTER"/>
     </center>
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">

@@ -2,6 +2,8 @@ module com.restready.client {
 
     requires com.restready.common;
 
+    requires lombok;
+
     requires javafx.controls;
     requires javafx.fxml;
 

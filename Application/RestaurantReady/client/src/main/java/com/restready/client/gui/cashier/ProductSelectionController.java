@@ -10,7 +10,7 @@ import javafx.scene.text.TextAlignment;
 
 import java.util.function.Consumer;
 
-public class ProductCatalogBrowserController {
+public class ProductSelectionController {
 
     private static final int PRODUCTS_PER_ROW = 6;
     private static final int ROW_HEIGHT = 60; // Pixels
