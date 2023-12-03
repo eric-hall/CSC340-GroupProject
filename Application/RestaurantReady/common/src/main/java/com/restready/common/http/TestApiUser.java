@@ -131,10 +131,10 @@ public class TestApiUser {
             if (json != null) {
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setDoOutput(true);
-                OutputStream os = connection.getOutputStream();
-                os.write(json.getBytes());
-                os.flush();
-                os.close();
+                try (OutputStream os = connection.getOutputStream()) {
+                    os.write(json.getBytes());
+                    os.flush();
+                }
             }
 
             // Collect the response information
