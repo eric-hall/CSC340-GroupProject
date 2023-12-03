@@ -1,4 +1,6 @@
 module com.restready.common {
+
+    requires java.net.http;
     requires lombok;
 
     exports com.restready.common;

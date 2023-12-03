@@ -2,83 +2,150 @@ package com.restready.common.http;
 
 import java.io.*;
 import java.net.*;
+import java.net.http.*;
 import java.util.stream.Collectors;
 
 public class TestApiUser {
 
-    public record HttpResponse(HttpRequestMethod requestMethod, int code, String message) {
-        public void print() {
-            System.out.printf("%s request response (code %d): %s%n", requestMethod, code, message);
+    public static final String BASE_URL = "http://localhost:8080/api";
+
+    public static void main(String[] args) throws Exception {
+        JavaNetHttpPackage.runTest(BASE_URL);
+        JavaNetPackage.runTest(BASE_URL);
+    }
+
+    private static class JavaNetHttpPackage {
+
+        public static void runTest(String baseUrl) throws Exception {
+
+            URI path = new URI(baseUrl);
+
+            try (HttpClient client = HttpClient.newHttpClient()) {
+
+                HttpResponse<String> getResponse = sendGetRequest(client, path);
+                HttpResponse<String> postResponse = sendPostRequest(client, path, "{'key': 'value'}");
+                HttpResponse<String> putResponse = sendPutRequest(client, path, "{'key': 'updated'}");
+                HttpResponse<String> deleteResponse = sendDeleteRequest(client, path);
+
+                printResponse(getResponse);
+                printResponse(postResponse);
+                printResponse(putResponse);
+                printResponse(deleteResponse);
+            }
+        }
+
+        private static void printResponse(HttpResponse<String> response) {
+            System.out.printf("%s request response (code %d): %s%n", response.request().method(), response.statusCode(), response.body());
+        }
+
+        private static HttpResponse<String> sendGetRequest(HttpClient httpClient, URI path) throws Exception {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(path)
+                    .GET()
+                    .build();
+            return sendRequest(httpClient, request);
+        }
+
+        private static HttpResponse<String> sendPostRequest(HttpClient httpClient, URI path, String postData) throws Exception {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(path)
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(postData))
+                    .build();
+            return sendRequest(httpClient, request);
+        }
+
+        private static HttpResponse<String> sendPutRequest(HttpClient httpClient, URI path, String putData) throws Exception {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(path)
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(putData))
+                    .build();
+            return sendRequest(httpClient, request);
+        }
+
+        private static HttpResponse<String> sendDeleteRequest(HttpClient httpClient, URI path) throws Exception {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(path)
+                    .DELETE()
+                    .build();
+            return sendRequest(httpClient, request);
+        }
+
+        private static HttpResponse<String> sendRequest(HttpClient httpClient, HttpRequest request) throws Exception {
+            return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         }
     }
 
-    public enum HttpRequestMethod {
-        GET, POST, PUT, DELETE
-    }
+    private static class JavaNetPackage {
 
-    public static void main(String[] args) {
+        private record HttpResponse(HttpRequestMethod requestMethod, int code, String message) {
+            public void print() {
+                System.out.printf("%s request response (code %d): %s%n", requestMethod, code, message);
+            }
+        }
 
-        try {
+        private enum HttpRequestMethod {
+            GET, POST, PUT, DELETE
+        }
 
-            String baseUrl = "http://localhost:8080/api";
+        private static void runTest(String baseUrl) throws Exception {
 
-            // Test GET, POST, PUT, and DELETE
-            HttpResponse getResponse = sendGetRequest(baseUrl);
-            HttpResponse postResponse = sendPostRequest(baseUrl, "{'key': 'value'}");
-            HttpResponse putResponse = sendPutRequest(baseUrl, "{'key': 'updated'}");
-            HttpResponse deleteResponse = sendDeleteRequest(baseUrl);
+            URI path = new URI(baseUrl);
+
+            HttpResponse getResponse = sendGetRequest(path);
+            HttpResponse postResponse = sendPostRequest(path, "{'key': 'value'}");
+            HttpResponse putResponse = sendPutRequest(path, "{'key': 'updated'}");
+            HttpResponse deleteResponse = sendDeleteRequest(path);
 
             getResponse.print();
             postResponse.print();
             putResponse.print();
             deleteResponse.print();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static HttpResponse sendGetRequest(String url) throws Exception {
-        return sendHttpRequest(url, HttpRequestMethod.GET, null);
-    }
-
-    public static HttpResponse sendPostRequest(String url, String postData) throws Exception {
-        return sendHttpRequest(url, HttpRequestMethod.POST, postData);
-    }
-
-    public static HttpResponse sendPutRequest(String url, String putData) throws Exception {
-        return sendHttpRequest(url, HttpRequestMethod.PUT, putData);
-    }
-
-    public static HttpResponse sendDeleteRequest(String url) throws Exception {
-        return sendHttpRequest(url, HttpRequestMethod.DELETE, null);
-    }
-
-    private static HttpResponse sendHttpRequest(String baseUrl, HttpRequestMethod requestMethod, String json) throws URISyntaxException, IOException {
-
-        // Open the url connection and set request method
-        URL url = new URI(baseUrl + "/" + requestMethod.name().toLowerCase()).toURL();
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod(requestMethod.name());
-
-        // Output json to the connection, if any
-        if (json != null) {
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setDoOutput(true);
-            OutputStream os = connection.getOutputStream();
-            os.write(json.getBytes());
-            os.flush();
-            os.close();
         }
 
-        // Collect the response information
-        int responseCode = connection.getResponseCode();
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String responseMessage = in.lines().collect(Collectors.joining());
-        in.close();
+        private static HttpResponse sendGetRequest(URI path) throws Exception {
+            return sendHttpRequest(path, HttpRequestMethod.GET, null);
+        }
 
-        // Close the connection and return the response
-        connection.disconnect();
-        return new HttpResponse(requestMethod, responseCode, responseMessage);
+        private static HttpResponse sendPostRequest(URI path, String postData) throws Exception {
+            return sendHttpRequest(path, HttpRequestMethod.POST, postData);
+        }
+
+        private static HttpResponse sendPutRequest(URI path, String putData) throws Exception {
+            return sendHttpRequest(path, HttpRequestMethod.PUT, putData);
+        }
+
+        private static HttpResponse sendDeleteRequest(URI path) throws Exception {
+            return sendHttpRequest(path, HttpRequestMethod.DELETE, null);
+        }
+
+        private static HttpResponse sendHttpRequest(URI path, HttpRequestMethod requestMethod, String json) throws IOException {
+
+            // Open the url connection and set request method
+            URL url = path.toURL();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod(requestMethod.name());
+
+            // Output json to the connection, if any
+            if (json != null) {
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setDoOutput(true);
+                OutputStream os = connection.getOutputStream();
+                os.write(json.getBytes());
+                os.flush();
+                os.close();
+            }
+
+            // Collect the response information
+            int responseCode = connection.getResponseCode();
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String responseMessage = in.lines().collect(Collectors.joining());
+            in.close();
+
+            // Close the connection and return the response
+            connection.disconnect();
+            return new HttpResponse(requestMethod, responseCode, responseMessage);
+        }
     }
 }
