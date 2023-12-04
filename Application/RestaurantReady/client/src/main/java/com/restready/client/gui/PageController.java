@@ -15,7 +15,7 @@ public abstract class PageController {
     private Parent _root;
     private String _name;
 
-    private void initialize(ClientApplication app, Parent root, String name) {
+    public void initialize(ClientApplication app, Parent root, String name) {
         _app = app;
         _root = root;
         _name = name;

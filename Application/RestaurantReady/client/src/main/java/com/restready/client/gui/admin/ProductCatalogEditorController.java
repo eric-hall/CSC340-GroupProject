@@ -97,7 +97,7 @@ public class ProductCatalogEditorController extends PageController {
                 }
             }
         } catch (URISyntaxException e) {
-            Log.error(this, "Demo failed -_-;;", e);
+            Log.error(this, "Demo failed: Can't load sample menu", e);
         }
     }
     //endregion
@@ -157,7 +157,12 @@ public class ProductCatalogEditorController extends PageController {
     }
 
     @FXML // TODO: Remove later (demo)
-    public void onMenuOpenOrderEntry() {
+    public void onMenuGoToEmployees() {
+        navigateTo(EmployeeProfilesController.class);
+    }
+
+    @FXML // TODO: Remove later (demo)
+    public void onMenuGoToOrderEntry() {
         OrderEntryController page = getOrLoadPage(OrderEntryController.class);
         page.setProductCatalog(productCatalog);
         navigateTo(OrderEntryController.class);

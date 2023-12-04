@@ -1,5 +1,6 @@
 package com.restready.client.gui;
 
+import com.restready.client.gui.admin.EmployeeProfilesController;
 import com.restready.common.util.Log;
 import com.restready.client.gui.admin.*;
 import com.restready.client.gui.cashier.*;
@@ -39,7 +40,13 @@ public class ClientApplication extends Application {
         registerPageFXML(
                 OrderEntryController.class,
                 "/fxml/cashier/order-entry.fxml");
-        navigateTo(ProductCatalogEditorController.class);
+//        navigateTo(ProductCatalogEditorController.class);
+
+        // TODO: Remove this patch and implement a mechanism to register PageControllers not loaded from FXML
+        EmployeeProfilesController temp = new EmployeeProfilesController();
+        temp.initialize(this);
+        _loadedPages.put(EmployeeProfilesController.class, temp);
+        navigateTo(EmployeeProfilesController.class);
 
         stage.setTitle("Restaurant Ready!");
         stage.setScene(_mainScene);
@@ -47,7 +54,7 @@ public class ClientApplication extends Application {
     }
 
     //region PageController management
-    public <T extends PageController> void registerPageFXML(Class<T> controllerClass, String fxmlPath) {
+    public void registerPageFXML(Class<? extends PageController> controllerClass, String fxmlPath) {
 
         if (_loadedPages.containsKey(controllerClass) || _unloadedPages.containsKey(controllerClass)) {
             Log.error(this, "Cannot register %s multiple times: ".formatted(controllerClass.getSimpleName()));
