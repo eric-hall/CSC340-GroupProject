@@ -55,11 +55,13 @@ public class EmployeeProfilesController extends PageController {
         MenuBar menuBar = new MenuBar();
 
         Menu fileMenu = new Menu("File");
+        MenuItem newItem = new MenuItem("New");
         MenuItem openItem = new MenuItem("Open");
         MenuItem saveItem = new MenuItem("Save");
-        openItem.setOnAction(e -> saveEmployeeDataToFile());
-        saveItem.setOnAction(e -> loadEmployeeDataFromFile());
-        fileMenu.getItems().addAll(openItem, saveItem);
+        newItem.setOnAction(e -> listView.getItems().clear());
+        openItem.setOnAction(e -> loadEmployeeDataFromFile());
+        saveItem.setOnAction(e -> saveEmployeeDataToFile());
+        fileMenu.getItems().addAll(newItem, openItem, saveItem);
 
         // TODO: Remove this later
         Menu demoMenu = new Menu("Demo");
