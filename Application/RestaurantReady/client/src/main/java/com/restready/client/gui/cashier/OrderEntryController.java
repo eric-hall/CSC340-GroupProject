@@ -1,6 +1,7 @@
 package com.restready.client.gui.cashier;
 
 import com.restready.client.gui.admin.ProductCatalogEditorController;
+import com.restready.client.gui.production.ActiveOrderQueueController;
 import com.restready.common.*;
 import com.restready.common.util.Log;
 import com.restready.client.gui.PageController;
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.StageStyle;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -178,7 +180,19 @@ public class OrderEntryController extends PageController {
 
     @FXML
     private void onSubmitButtonPressed() {
+        ActiveOrderQueueController queueController = getOrLoadPage(ActiveOrderQueueController.class);
         Log.trace(this, "Submit Button Pressed");
+
+        List<CustomerOrderCellData> products = customerOrderListView.getItems();
+
+        // Create a list of CustomerOrderItem
+        List<CustomerOrderItem> customerOrderItems = new ArrayList<>();
+        for (CustomerOrderCellData product : products) {
+            customerOrderItems.add(product.item);
+            Log.debug(this, "Added product: %s".formatted(product.item.getProduct().getName()));
+        }
+        queueController.addOrdersToInProgress(customerOrderItems);
+        customerOrderListView.getItems().clear();
     }
 
     private void onProductButtonPressed(Product product) {

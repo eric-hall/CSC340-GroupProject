@@ -60,7 +60,7 @@
                                                 <Insets />
                                             </GridPane.margin>
                                         </Button>
-                                        <Button fx:id="submitButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="110.0" layoutY="112.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSubmitButtonPressed" text="Submit" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                        <Button fx:id="submitButton" alignment="CENTER" contentDisplay="CENTER" layoutX="110.0" layoutY="112.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSubmitButtonPressed" text="Submit" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     </children>
                                 </GridPane>
                             </children>
@@ -74,7 +74,7 @@
         </VBox>
     </left>
     <center>
-        <fx:include fx:id="productSelection" source="product-selection.fxml" BorderPane.alignment="CENTER"/>
+        <fx:include fx:id="productSelection" source="product-selection.fxml" BorderPane.alignment="CENTER" />
     </center>
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">

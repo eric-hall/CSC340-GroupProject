@@ -3,6 +3,7 @@ package com.restready.client.gui.admin;
 import com.restready.client.gui.ClientApplication;
 import com.restready.client.gui.PageController;
 import com.restready.client.gui.cashier.OrderEntryController;
+import com.restready.client.gui.production.ActiveOrderQueueController;
 import com.restready.common.Product;
 import com.restready.common.ProductCatalog;
 import com.restready.common.util.Log;
@@ -160,7 +161,10 @@ public class ProductCatalogEditorController extends PageController {
     public void onMenuGoToEmployees() {
         navigateTo(EmployeeProfilesController.class);
     }
-
+    @FXML // TODO: Remove Later (demo)
+    public void onMenuGoToProduction() {
+        navigateTo(ActiveOrderQueueController.class);
+    }
     @FXML // TODO: Remove later (demo)
     public void onMenuGoToOrderEntry() {
         OrderEntryController page = getOrLoadPage(OrderEntryController.class);

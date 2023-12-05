@@ -17,6 +17,7 @@
                 <items>
                     <MenuItem mnemonicParsing="false" onAction="#onMenuGoToEmployees" text="Go To Employees" />
                     <MenuItem mnemonicParsing="false" onAction="#onMenuGoToOrderEntry" text="Go To Order Entry" />
+                    <MenuItem mnemonicParsing="false" onAction="#onMenuGoToProduction" text="Go To Production" />
                 </items>
             </Menu>
         </MenuBar>

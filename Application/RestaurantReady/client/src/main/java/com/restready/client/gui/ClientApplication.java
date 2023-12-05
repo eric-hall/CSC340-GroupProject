@@ -1,6 +1,7 @@
 package com.restready.client.gui;
 
 import com.restready.client.gui.admin.EmployeeProfilesController;
+import com.restready.client.gui.production.ActiveOrderQueueController;
 import com.restready.common.util.Log;
 import com.restready.client.gui.admin.*;
 import com.restready.client.gui.cashier.*;
@@ -40,6 +41,9 @@ public class ClientApplication extends Application {
         registerPageFXML(
                 OrderEntryController.class,
                 "/fxml/cashier/order-entry.fxml");
+        registerPageFXML(
+                ActiveOrderQueueController.class,
+                "/fxml/production/active-order-queue.fxml");
 //        navigateTo(ProductCatalogEditorController.class);
 
         // TODO: Remove this patch and implement a mechanism to register PageControllers not loaded from FXML
@@ -51,6 +55,7 @@ public class ClientApplication extends Application {
         stage.setTitle("Restaurant Ready!");
         stage.setScene(_mainScene);
         stage.show();
+
     }
 
     //region PageController management
